@@ -27,8 +27,10 @@ fi
 echo -n '#[fg=colour9]'
 if [[ $charged_slots -eq 10 ]]; then
   echo ' ᕦ(ò_óˇ)ᕤ'
-elif [[ $charged_slots -gt 5 ]]; then
+elif [[ $charged_slots -gt 6 ]]; then
   echo ' ᕕ( ᐛ )ᕗ'
+elif [[ $charged_slots -gt 4 ]]; then
+  echo ' ヽ(´ー` )┌'
 elif [[ $charged_slots -gt 2 ]]; then
   echo ' ｡ﾟ(°_o)'
 else
