@@ -135,7 +135,11 @@ autocmd CursorHold * checktime
 " colorscheme " ______________________________________________________________
 
 set background=dark
-colorscheme monokai
+try
+    colorscheme monokai
+catch
+    colorscheme default
+endtry
 
 " keymap _____________________________________________________________________
 
