@@ -1,7 +1,9 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+ch $DIR
+
 git submodule init
 git submodule update
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ln -s -f $DIR/.bash_profile ~/.bash_profile
 ln -s -f $DIR/.bashrc ~/.bashrc
