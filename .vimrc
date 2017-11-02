@@ -67,6 +67,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_python_pylint_options = '--rcfile=.pylintrc'
 let g:ale_python_pylint_use_global = 0
 let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
@@ -174,6 +175,11 @@ else
         let &t_te.="\e[4 q"
     endif
 
+endif
+
+if has("win32unix")
+    let g:ale_python_pylint_executable = '/usr/bin/pylint'
+    let g:ale_python_flake8_executable = '/usr/bin/flake8'
 endif
 
 " save/load session __________________________________________________________
