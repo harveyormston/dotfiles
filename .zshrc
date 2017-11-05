@@ -21,4 +21,12 @@ if [ "$machine" "==" "Cygwin" ]; then
   export PYTHONUNBUFFERED=yes
 else
   alias top="htop"
+  export PATH="/Library/TeX/texbin:$PATH"
 fi
+
+export PATH="~/.bin:$PATH"
+
+if [ -n "$VIRTUAL_ENV" ]; then
+  source "$VIRTUAL_ENV/bin/activate"
+fi
+
