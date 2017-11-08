@@ -84,6 +84,14 @@ set nowrap
 
 " filetype-specific _________________________________________________________
 
+" templates
+
+augroup templates
+  autocmd BufNewFile *.py 0r ~/.vim/templates/skeleton.py
+augroup END
+
+" unknown
+
 autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | set ft=unknown | endif
 
 " python
