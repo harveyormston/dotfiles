@@ -73,6 +73,8 @@ let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
 let g:ale_set_loclist = 1
 let g:presenting_top_margin = 2
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 " whitespace _________________________________________________________________
 
