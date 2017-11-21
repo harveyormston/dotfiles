@@ -26,17 +26,3 @@ if [[ $charged_slots -lt 10 ]]; then
   echo -n '#[fg=colour59]'
   for i in `seq 1 $(echo "10-$charged_slots" | bc)`; do echo -n "$HEART"; done
 fi
-
-echo -n '#[fg=colour9]'
-if [[ $charged_slots -gt 7 ]]; then
-  echo ' ᕦ(ò_óˇ)ᕤ'
-elif [[ $charged_slots -gt 5 ]]; then
-  echo ' ᕕ( ᐛ )ᕗ'
-elif [[ $charged_slots -gt 3 ]]; then
-	echo ' (・_・ヾ'
-elif [[ $charged_slots -gt 2 ]]; then
-  echo ' ｡ﾟ(°_o)'
-else
-  echo ' (҂◡_◡)'
-fi
-
