@@ -1,6 +1,7 @@
 export ZSH=$HOME/.oh-my-zsh
+ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
-plugins=(brew, extract, git, git-extras, osx, python, web-search)
+plugins=(brew, extract, git, git-extras, osx, pip, python, tmux, vagrant, vi-mode, web-search, wd)
 source $ZSH/oh-my-zsh.sh
 export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 export PATH="/Library/TeX/texbin:$PATH"
@@ -27,6 +28,17 @@ fi
 export PATH="~/.bin:$PATH"
 
 if [ -n "$VIRTUAL_ENV" ]; then
-  source "$VIRTUAL_ENV/bin/activate"
+  if [ -e "$VIRTUAL_ENV/bin/activate" ]; then
+    source "$VIRTUAL_ENV/bin/activate"
+  elif [ -e "$VIRTUAL_ENV/Scripts/activate" ]; then
+    source "$VIRTUAL_ENV/Scripts/activate"
+  fi
+else
+  if [ -e ~/.virtualenvs/default ]; then
+    source ~/.virtualenvs/default
+  fi
 fi
 
+if [ "$TMUX" = "" ]; then
+  exec tmux
+fi
