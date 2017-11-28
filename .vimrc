@@ -41,6 +41,7 @@ Plugin 'mzlogin/vim-markdown-toc'
 Plugin 'samsaga2/vim-z80'
 Plugin 'chrisbra/csv.vim'
 Plugin 'sotte/presenting.vim'
+Plugin 'majutsushi/tagbar'
 call vundle#end()
 filetype plugin indent on
 
@@ -75,6 +76,8 @@ let g:ale_set_loclist = 1
 let g:presenting_top_margin = 2
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+nmap <leader>t :TagbarToggle<CR>
+xmap <leader>t :TagbarToggle<CR>
 
 " whitespace _________________________________________________________________
 
