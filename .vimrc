@@ -53,6 +53,16 @@ endif
 set nocompatible
 filetype off
 
+" keymap _____________________________________________________________________
+
+let mapleader=","
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+inoremap jk <esc>
+inoremap <esc> <nop>
+nnoremap * *``
+nnoremap # #``
+
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
@@ -155,14 +165,6 @@ try
 catch
     colorscheme default
 endtry
-
-" keymap _____________________________________________________________________
-
-let mapleader=","
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-inoremap jk <esc>
-inoremap <esc> <nop>
 
 " os-specific ________________________________________________________________
 
