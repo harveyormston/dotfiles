@@ -39,6 +39,12 @@ else
   fi
 fi
 
-if [ "$TMUX" = "" ]; then
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    session=remote
+else
+    session=local
+fi
+
+if [ "$TMUX" = "" ] && ["$session" "==" "local"]; then
   exec tmux
 fi
