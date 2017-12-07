@@ -45,6 +45,6 @@ else
     session=local
 fi
 
-if [ "$TMUX" = "" ] && ["$session" "==" "local"]; then
+if [ "$TMUX" = "" ] && [ "$session" "==" "local" ]; then
   exec tmux
 fi
