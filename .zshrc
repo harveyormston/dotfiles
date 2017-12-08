@@ -23,6 +23,7 @@ if [ "$machine" "==" "Cygwin" ]; then
 else
   alias top="htop"
   export PATH="/Library/TeX/texbin:$PATH"
+  alias ctags="`brew --prefix`/bin/ctags"
 fi
 
 export PATH="~/.bin:$PATH"
