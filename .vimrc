@@ -154,7 +154,7 @@ if has('persistent_undo')
     set undodir=$HOME/.vim/undo
 endif
 
-set tags=~/.tags;./.tags
+set tags=./tags;/
 autocmd CursorHold * checktime
 
 " colorscheme " ______________________________________________________________
