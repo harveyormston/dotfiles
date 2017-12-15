@@ -17,3 +17,5 @@ ln -s -f $DIR/.zshrc ~/.zshrc
 ln -s -f $DIR/gitignore_global ~/.gitignore
 ln -s -f $DIR/oh-my-zsh ~/.oh-my-zsh
 ln -s -f $DIR/showsix.zsh-theme ~/.oh-my-zsh/themes/showsix.zsh-theme
+
+vim +PluginInstall +qall
