@@ -88,6 +88,7 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
+nmap <leader>a :AirlineToggle<CR>
 
 " whitespace _________________________________________________________________
 
