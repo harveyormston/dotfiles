@@ -109,6 +109,16 @@ augroup END
 
 autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | set ft=unknown | endif
 
+" Makefile
+augroup MakefileGroup
+  au! BufRead,BufNewFile,BufEnter Makefile set ft=make
+augroup END
+
+" Jenkinsfile
+augroup JenkinsfileGroup
+  au! BufRead,BufNewFile,BufEnter Jenkinsfile set ft=groovy
+augroup END
+
 " python
 
 autocmd Filetype python setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
