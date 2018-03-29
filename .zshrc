@@ -71,3 +71,6 @@ bindkey -M vicmd "^V" edit-command-line
 
 # Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
 export KEYTIMEOUT=1
+
+# load iterm2 integration if available
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
