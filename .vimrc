@@ -72,11 +72,15 @@ inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
 
-cabbrev grep
+" vimgrep recusively for current word in files of the same type
+cabbrev gg
       \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
       \ ./**/*<C-R>=(expand("%:e")=="" ? "" : ".".expand("%:e"))<CR>
       \ <Bar> copen
       \ <C-Left><C-Left><C-Left>
+
+" cd to directory of current file
+:command CD cd %:p:h
 
 " plugin_config ______________________________________________________________
 
