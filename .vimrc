@@ -60,8 +60,14 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
 inoremap <esc> <nop>
-nnoremap * *``
-nnoremap # #``
+nnoremap * *``zz
+nnoremap # #``zz
+
+cabbrev grep
+      \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
+      \ ./**/*<C-R>=(expand("%:e")=="" ? "" : ".".expand("%:e"))<CR>
+      \ <Bar> copen
+      \ <C-Left><C-Left><C-Left>
 
 " plugin_config ______________________________________________________________
 
@@ -89,7 +95,6 @@ nmap ga <Plug>(EasyAlign)
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
 nmap <leader>a :AirlineToggle<CR>
-
 " whitespace _________________________________________________________________
 
 set tabstop=4
