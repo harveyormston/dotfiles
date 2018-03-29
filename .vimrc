@@ -60,8 +60,8 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
 inoremap <esc> <nop>
-nnoremap * *``zz
-nnoremap # #``zz
+nnoremap * *Nzz
+nnoremap # #Nzz
 
 cabbrev grep
       \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
@@ -95,6 +95,7 @@ nmap ga <Plug>(EasyAlign)
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
 nmap <leader>a :AirlineToggle<CR>
+
 " whitespace _________________________________________________________________
 
 set tabstop=4
@@ -173,7 +174,7 @@ endif
 set tags=./tags;/
 autocmd CursorHold * checktime
 
-" colorscheme " ______________________________________________________________
+" colorscheme ________________________________________________________________
 
 set background=dark
 try
@@ -238,6 +239,7 @@ autocmd VimLeave * call SaveSess()
 autocmd VimEnter * nested call RestoreSess()
 
 " set style for presenting ___________________________________________________
+
 fu! Present()
     set background=light
     colorscheme papercolor
@@ -253,6 +255,6 @@ fu! EndPresent()
     let g:airline_theme = 'zenburn'
 endfunction
 
-" end " ______________________________________________________________________
+" end ________________________________________________________________________
 
-set exrc " load local .vimrc
+set exrc
