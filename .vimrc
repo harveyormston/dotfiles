@@ -16,7 +16,6 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-vinegar'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'w0rp/ale'
 Plugin 'sickill/vim-monokai'
@@ -62,6 +61,13 @@ set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
 set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
 
+let g:netrw_liststyle = 3     " tree
+let g:netrw_banner = 0        " no banner
+let g:netrw_altv = 1          " open files on right
+let g:netrw_preview = 1       " open previews vertically
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 20
+
 " keymap _____________________________________________________________________
 
 let mapleader=","
@@ -71,6 +77,7 @@ inoremap jk <esc>
 inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
+nmap <leader>e :call ToggleVex()<CR>
 
 " vimgrep recusively for current word in files of the same type
 cabbrev gg
@@ -80,7 +87,7 @@ cabbrev gg
       \ <C-Left><C-Left><C-Left>
 
 " cd to directory of current file
-:command CD cd %:p:h
+:command! CD cd %:p:h
 
 " plugin_config ______________________________________________________________
 
@@ -246,6 +253,29 @@ if filereadable(getcwd() . '/.session.vim')
         endfor
     endif
 endif
+endfunction
+
+fu! ToggleVex()
+    if exists("t:expl_buf_num")
+        let expl_win_num = bufwinnr(t:expl_buf_num)
+        if expl_win_num != -1
+            let cur_win_nr = winnr()
+            exec expl_win_num . 'wincmd w'
+            close
+            try
+                exec cur_win_nr . 'wincmd w'
+                unlet t:expl_buf_num
+            catch
+                unlet t:expl_buf_num
+            endtry
+        else
+            unlet t:expl_buf_num
+        endif
+    else
+        exec '1wincmd w'
+        Vexplore
+        let t:expl_buf_num = bufnr("%")
+    endif
 endfunction
 
 autocmd VimLeave * call SaveSess()
