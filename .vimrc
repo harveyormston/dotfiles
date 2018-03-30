@@ -31,7 +31,6 @@ Plugin 'yegappan/mru'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'will133/vim-dirdiff'
 Plugin 'hdima/python-syntax'
-Plugin 'lifepillar/vim-mucomplete'
 Plugin 'PeterRincker/vim-argumentative'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'rust-lang/rust.vim'
@@ -43,6 +42,10 @@ Plugin 'samsaga2/vim-z80'
 Plugin 'chrisbra/csv.vim'
 Plugin 'sotte/presenting.vim'
 Plugin 'majutsushi/tagbar'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'maralla/completor.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'harveyormston/vim-snippets'
 call vundle#end()
 filetype plugin indent on
 
@@ -60,6 +63,8 @@ set wildignore+=*.wav,*.mp3,*.raw " binary audio
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
 set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
+set completeopt+=menuone,noinsert,noselect,preview
+
 
 let g:netrw_liststyle = 3     " tree
 let g:netrw_banner = 0        " no banner
@@ -110,6 +115,14 @@ let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
 let g:ale_set_loclist = 1
 let g:presenting_top_margin = 2
+let g:jedi#popup_on_dot = 0
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+let g:UltiSnipsSnippetDirectories=["mysnippets"]
+let g:snips_author="Harvey Ormston"
+let g:snips_email="harveyormston@me.com"
+
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 nmap <leader>t :TagbarToggle<CR>
@@ -126,15 +139,12 @@ set nowrap
 
 " filetype-specific _________________________________________________________
 
-" templates
-
-augroup templates
-  autocmd BufNewFile *.py 0r ~/.vim/templates/skeleton.py
-augroup END
-
 " unknown
 
 autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | set ft=unknown | endif
+
+" single-line commentstring for c-flavoured languages
+autocmd FileType c,cpp,cs,objc,objcpp,java setlocal commentstring=//\ %s
 
 " Makefile
 augroup MakefileGroup
@@ -258,19 +268,9 @@ endfunction
 fu! ToggleVex()
     if exists("t:expl_buf_num")
         let expl_win_num = bufwinnr(t:expl_buf_num)
-        if expl_win_num != -1
-            let cur_win_nr = winnr()
-            exec expl_win_num . 'wincmd w'
-            close
-            try
-                exec cur_win_nr . 'wincmd w'
-                unlet t:expl_buf_num
-            catch
-                unlet t:expl_buf_num
-            endtry
-        else
-            unlet t:expl_buf_num
-        endif
+        exec expl_win_num . 'wincmd w'
+        close
+        unlet t:expl_buf_num
     else
         exec '1wincmd w'
         Vexplore
