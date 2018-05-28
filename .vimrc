@@ -21,6 +21,7 @@ Plugin 'w0rp/ale'
 Plugin 'sickill/vim-monokai'
 Plugin 'Yavor-Ivanov/airline-monokai-subtle.vim'
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'TroyFletcher/vim-colors-synthwave'
 Plugin 'AndrewRadev/switch.vim'
 Plugin 'fidian/hexmode'
 Plugin 'vim-airline/vim-airline'
@@ -43,7 +44,6 @@ Plugin 'chrisbra/csv.vim'
 Plugin 'sotte/presenting.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'davidhalter/jedi-vim'
-Plugin 'maralla/completor.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'harveyormston/vim-snippets'
 call vundle#end()
@@ -51,7 +51,7 @@ filetype plugin indent on
 
 " defaults ___________________________________________________________________
 
-if v:version >= 800
+if v:version >= 800 && !has('nvim')
     source $VIMRUNTIME/defaults.vim
 endif
 set nocompatible
