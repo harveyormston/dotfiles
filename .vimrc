@@ -64,7 +64,7 @@ set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
 set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
 set completeopt+=menuone,noinsert,noselect,preview
-
+set diffopt+=vertical
 
 let g:netrw_liststyle = 3     " tree
 let g:netrw_banner = 0        " no banner
@@ -84,6 +84,18 @@ nnoremap * *Nzz
 nnoremap # #Nzz
 nmap <leader>e :call ToggleVex()<CR>
 
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
 " vimgrep recusively for current word in files of the same type
 cabbrev gg
       \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
@@ -93,6 +105,9 @@ cabbrev gg
 
 " cd to directory of current file
 :command! CD cd %:p:h
+
+" fancy git log
+command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
 
 " plugin_config ______________________________________________________________
 
