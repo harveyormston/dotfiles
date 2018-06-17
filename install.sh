@@ -5,6 +5,8 @@ ch $DIR
 git submodule init
 git submodule update
 
+git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+
 ln -s -f $DIR/.bash_profile ~/.bash_profile
 ln -s -f $DIR/.bashrc ~/.bashrc
 ln -s -f $DIR/.bin ~/.bin
