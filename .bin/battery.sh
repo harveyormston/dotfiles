@@ -20,7 +20,12 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 elif [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ]; then
   current_charge=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining | sed -e '2!d' -e 's/[ \r\n\t]*//g' | awk '{print $1;}')
   total_charge="100"
-  state="N"
+  state=$(WMIC Path Win32_Battery Get BatteryStatus | sed -e '2!d' -e 's/[ \r\n\t ]*//g' | awk '{print $1;}')
+  if [[ "$state" == '2' ]]; then
+      state="Y"
+  else
+      state="N"
+  fi
 fi
 
 charged_slots=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l | cut -d '.' -f 1)
