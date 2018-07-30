@@ -235,6 +235,9 @@ hi VertSplit ctermbg=darkgrey ctermfg=black
 hi TabLineFill ctermfg=black ctermbg=black
 hi TabLine ctermfg=Blue ctermbg=black
 hi TabLineSel ctermfg=Red ctermbg=black
+hi clear SpellBad
+hi SpellBad cterm=underline ctermfg=black ctermbg=red
+
 
 " os-specific ________________________________________________________________
 
@@ -253,6 +256,7 @@ else
         let &t_SI.="\eP\e[4 q\e\\"
         let &t_EI.="\eP\e[2 q\e\\"
         let &t_te.="\eP\e[4 q\e\\"
+        set t_Co=256
     else
         let &t_ti.="\e[2 q"
         let &t_SI.="\e[4 q"
