@@ -115,7 +115,7 @@ cabbrev gg
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-let g:airline_theme = 'base16color'
+let g:airline_theme = 'base16'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline_section_x = ''
@@ -326,7 +326,7 @@ endfunction
 fu! EndPresent()
     set background=dark
     colorscheme base16
-    let g:airline_theme = 'base16color'
+    let g:airline_theme = 'base16'
 endfunction
 
 " end ________________________________________________________________________
