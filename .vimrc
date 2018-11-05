@@ -76,7 +76,7 @@ let g:netrw_winsize = 20
 
 " keymap _____________________________________________________________________
 
-let mapleader=","
+map <space> <leader>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
