@@ -84,6 +84,7 @@ inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
 nmap <leader>e :call ToggleVex()<CR>
+nmap <leader>d :call DiffMode()<CR>
 
 " Go to tab by number
 nnoremap <leader>1 1gt
@@ -317,7 +318,7 @@ endfunction
 fu! Present()
     set background=light
     colorscheme papercolor
-    let g:airline_theme = 'papercolor'
+    AirlineTheme = papercolor
     PresentingStart
     set cc=0
     set nospell
@@ -326,7 +327,15 @@ endfunction
 fu! EndPresent()
     set background=dark
     colorscheme base16
-    let g:airline_theme = 'base16'
+    AirlineTheme base16color
+endfunction
+
+fu! DiffMode()
+    set background=light
+    colorscheme papercolor
+    AirlineTheme ayu_mirage
+    set cc=0
+    set nospell
 endfunction
 
 " end ________________________________________________________________________
