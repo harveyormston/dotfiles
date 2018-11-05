@@ -47,6 +47,7 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'harveyormston/vim-snippets'
 Plugin 'chriskempson/base16-vim'
+Plugin 'unblevable/quick-scope'
 call vundle#end()
 filetype plugin indent on
 
