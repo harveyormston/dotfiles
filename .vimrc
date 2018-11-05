@@ -31,7 +31,7 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'yegappan/mru'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'will133/vim-dirdiff'
-Plugin 'hdima/python-syntax'
+Plugin 'vim-python/python-syntax'
 Plugin 'PeterRincker/vim-argumentative'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'rust-lang/rust.vim'
@@ -46,6 +46,8 @@ Plugin 'majutsushi/tagbar'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'harveyormston/vim-snippets'
+Plugin 'chriskempson/base16-vim'
+Plugin 'unblevable/quick-scope'
 call vundle#end()
 filetype plugin indent on
 
@@ -75,7 +77,7 @@ let g:netrw_winsize = 20
 
 " keymap _____________________________________________________________________
 
-let mapleader=","
+map <space> <leader>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
@@ -83,18 +85,21 @@ inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
 nmap <leader>e :call ToggleVex()<CR>
+nmap <leader>d :call DiffMode()<CR>
 
 " Go to tab by number
-noremap <leader>1 1gt
-noremap <leader>2 2gt
-noremap <leader>3 3gt
-noremap <leader>4 4gt
-noremap <leader>5 5gt
-noremap <leader>6 6gt
-noremap <leader>7 7gt
-noremap <leader>8 8gt
-noremap <leader>9 9gt
-noremap <leader>0 :tablast<cr>
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+nnoremap <leader>0 :tablast<cr>
+nnoremap <C-l> :tabnext<CR>
+nnoremap <C-h> :tabprevious<CR>
 
 " vimgrep recusively for current word in files of the same type
 cabbrev gg
@@ -107,12 +112,13 @@ cabbrev gg
 :command! CD cd %:p:h
 
 " fancy git log
-command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
+:command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
 
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-let g:airline_theme = 'zenburn'
+let g:airline_theme = 'base16'
+let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline_section_x = ''
 let g:airline_section_y = ''
@@ -128,6 +134,7 @@ let g:ale_python_pylint_options = '--rcfile=.pylintrc'
 let g:ale_python_pylint_use_global = 0
 let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
+let g:python_highlight_all = 1
 let g:ale_set_loclist = 1
 let g:presenting_top_margin = 2
 let g:jedi#popup_on_dot = 0
@@ -155,7 +162,6 @@ set nowrap
 " filetype-specific _________________________________________________________
 
 " unknown
-
 autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | set ft=unknown | endif
 
 " single-line commentstring for c-flavoured languages
@@ -172,7 +178,6 @@ augroup JenkinsfileGroup
 augroup END
 
 " python
-
 autocmd Filetype python setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype python setlocal makeprg=pylint\ --reports=n\ --output-format=parseable\ %
 autocmd Filetype python setlocal errorformat=%f:%l:\ %m
@@ -221,12 +226,22 @@ autocmd CursorHold * checktime
 
 " colorscheme ________________________________________________________________
 
-set background=dark
-try
-    colorscheme monokai
-catch
-    colorscheme default
-endtry
+ try
+     colorscheme base16
+ catch
+     colorscheme default
+ endtry
+
+hi clear SignColumn
+hi ColorColumn ctermbg=18
+hi LineNr ctermfg=darkgrey
+hi VertSplit ctermbg=darkgrey ctermfg=black
+hi TabLineFill ctermfg=black ctermbg=black
+hi TabLine ctermfg=Blue ctermbg=black
+hi TabLineSel ctermfg=Red ctermbg=black
+hi clear SpellBad
+hi SpellBad cterm=underline ctermfg=black ctermbg=red
+
 
 " os-specific ________________________________________________________________
 
@@ -245,6 +260,7 @@ else
         let &t_SI.="\eP\e[4 q\e\\"
         let &t_EI.="\eP\e[2 q\e\\"
         let &t_te.="\eP\e[4 q\e\\"
+        set t_Co=256
     else
         let &t_ti.="\e[2 q"
         let &t_SI.="\e[4 q"
@@ -280,6 +296,11 @@ if filereadable(getcwd() . '/.session.vim')
 endif
 endfunction
 
+autocmd VimLeave * call SaveSess()
+autocmd VimEnter * nested call RestoreSess()
+
+" vertical netrw  ____________________________________________________________
+
 fu! ToggleVex()
     if exists("t:expl_buf_num")
         let expl_win_num = bufwinnr(t:expl_buf_num)
@@ -293,15 +314,12 @@ fu! ToggleVex()
     endif
 endfunction
 
-autocmd VimLeave * call SaveSess()
-autocmd VimEnter * nested call RestoreSess()
-
 " set style for presenting ___________________________________________________
 
 fu! Present()
     set background=light
     colorscheme papercolor
-    let g:airline_theme = 'papercolor'
+    AirlineTheme = papercolor
     PresentingStart
     set cc=0
     set nospell
@@ -309,8 +327,16 @@ endfunction
 
 fu! EndPresent()
     set background=dark
-    colorscheme monokai
-    let g:airline_theme = 'zenburn'
+    colorscheme base16
+    AirlineTheme base16color
+endfunction
+
+fu! DiffMode()
+    set background=light
+    colorscheme papercolor
+    AirlineTheme ayu_mirage
+    set cc=0
+    set nospell
 endfunction
 
 " end ________________________________________________________________________

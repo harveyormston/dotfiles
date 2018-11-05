@@ -1,5 +1,14 @@
 # oh-my-zsh Theme
 
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+
 ### Git [±master ▾●]
 
 ZSH_THEME_GIT_PROMPT_PREFIX="[%{$fg_bold[green]%}±%{$reset_color%}%{$fg_bold[white]%}"
@@ -39,20 +48,22 @@ theme_git_status() {
     _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
 
-  # check status of local repository
-  _INDEX=$(command git status --porcelain -b 2> /dev/null)
-  if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
-  fi
-  if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
-  fi
-  if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
-  fi
+  if [ "$machine" "!=" "Cygwin" ]; then
+    # check status of local repository
+    _INDEX=$(command git status --porcelain -b 2> /dev/null)
+    if $(echo "$_INDEX" | command grep -q '^## .*ahead'); then
+      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
+    fi
+    if $(echo "$_INDEX" | command grep -q '^## .*behind'); then
+      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
+    fi
+    if $(echo "$_INDEX" | command grep -q '^## .*diverged'); then
+      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_DIVERGED"
+    fi
 
-  if $(command git rev-parse --verify refs/stash &> /dev/null); then
-    _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
+    if $(command git rev-parse --verify refs/stash &> /dev/null); then
+      _STATUS="$_STATUS$ZSH_THEME_GIT_PROMPT_STASHED"
+    fi
   fi
 
   echo $_STATUS
