@@ -18,10 +18,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'w0rp/ale'
-Plugin 'sickill/vim-monokai'
-Plugin 'Yavor-Ivanov/airline-monokai-subtle.vim'
-Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'TroyFletcher/vim-colors-synthwave'
 Plugin 'AndrewRadev/switch.vim'
 Plugin 'fidian/hexmode'
 Plugin 'vim-airline/vim-airline'
@@ -35,10 +31,7 @@ Plugin 'vim-python/python-syntax'
 Plugin 'PeterRincker/vim-argumentative'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'rust-lang/rust.vim'
-Plugin 'Valloric/ListToggle'
-Plugin 'francoiscabrol/ranger.vim'
 Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'mzlogin/vim-markdown-toc'
 Plugin 'samsaga2/vim-z80'
 Plugin 'chrisbra/csv.vim'
 Plugin 'sotte/presenting.vim'
@@ -77,15 +70,22 @@ let g:netrw_winsize = 20
 
 " keymap _____________________________________________________________________
 
-map <space> <leader>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
 inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
+map <space> <leader>
+nmap <leader>\| :vsp<CR>
+nmap <leader>- :sp<CR>
+nmap <leader>l :set bg=light<CR>
+nmap <leader>k :set bg=dark<CR>
 nmap <leader>e :call ToggleVex()<CR>
-nmap <leader>d :call DiffMode()<CR>
+nmap <leader>c :call ToggleDiff()<CR>
+nmap <leader>m :MRU<CR>
+nnoremap <leader>b :buffers<CR>:buffer<Space>
+set pastetoggle=<leader>p
 
 " Go to tab by number
 nnoremap <leader>1 1gt
@@ -314,31 +314,17 @@ fu! ToggleVex()
     endif
 endfunction
 
-" set style for presenting ___________________________________________________
+" diff mode  _________________________________________________________________
 
-fu! Present()
-    set background=light
-    colorscheme papercolor
-    AirlineTheme = papercolor
-    PresentingStart
-    set cc=0
-    set nospell
+fu! ToggleDiff()
+    if exists("g:diffmode")
+        :diffoff
+        unlet g:diffmode
+    else
+        :windo diffthis
+        let g:diffmode = 'true'
+    endif
 endfunction
-
-fu! EndPresent()
-    set background=dark
-    colorscheme base16
-    AirlineTheme base16color
-endfunction
-
-fu! DiffMode()
-    set background=light
-    colorscheme papercolor
-    AirlineTheme ayu_mirage
-    set cc=0
-    set nospell
-endfunction
-
 " end ________________________________________________________________________
 
 set exrc
