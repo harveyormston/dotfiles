@@ -47,6 +47,7 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'harveyormston/vim-snippets'
 Plugin 'chriskempson/base16-vim'
+Plugin 'unblevable/quick-scope'
 call vundle#end()
 filetype plugin indent on
 
@@ -76,7 +77,7 @@ let g:netrw_winsize = 20
 
 " keymap _____________________________________________________________________
 
-let mapleader=","
+map <space> <leader>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
@@ -116,7 +117,7 @@ cabbrev gg
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-let g:airline_theme = 'base16color'
+let g:airline_theme = 'base16'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline_section_x = ''
