@@ -1,4 +1,5 @@
 export ZSH=$HOME/.oh-my-zsh
+ZSH_DISABLE_COMPFIX=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
 plugins=(brew, extract, git, git-extras, osx, pip, python, tmux, vagrant, vi-mode, web-search, wd)
@@ -17,11 +18,13 @@ if [ "$machine" "==" "Cygwin" ]; then
   alias cmd="~/win/local/cmder/Cmder.exe"
   alias open=cygstart
   export PYTHONUNBUFFERED=yes
-else
+elif [ "$machine" "==" "Mac" ]; then
   alias top="htop"
   export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
   export PATH="/Library/TeX/texbin:$PATH"
   alias ctags="`brew --prefix`/bin/ctags"
+else
+  alias top="htop"
 fi
 
 export PATH="~/.bin:$PATH"
