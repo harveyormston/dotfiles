@@ -3,8 +3,8 @@
 let os = substitute(system('uname'), "\n", "", "")
 
 if has("win32")
-    set rtp+=%HOME%/vimfiles/bundle/Vundle.vim/
-    call vundle#begin('%USERPROFILE%/vimfiles/bundle/')
+    set rtp+=$HOME/.vim/bundle/Vundle.vim/
+    call vundle#begin('$HOME/.vim/bundle/')
 else
     set rtp+=~/.vim/bundle/Vundle.vim
     call vundle#begin()
@@ -246,8 +246,8 @@ hi SpellBad cterm=underline ctermfg=black ctermbg=red
 " os-specific ________________________________________________________________
 
 if has("win32")
-    set directory=%HOME%/vimfiles/swapfiles//
-    set backupdir=%HOME%/vimfiles/swapfiles//
+    set directory=$HOME/.vim/swapfiles//
+    set backupdir=$HOME/.vim/swapfiles//
 else
     set directory=$HOME/.vim/swapfiles//
     set backupdir=$HOME/.vim/swapfiles//
