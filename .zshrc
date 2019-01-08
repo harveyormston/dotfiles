@@ -15,8 +15,8 @@ case "${unameOut}" in
 esac
 
 if [ "$machine" "==" "Cygwin" ]; then
-  alias cmd="~/win/local/cmder/Cmder.exe"
   alias open=cygstart
+  alias cmd="open cmd.exe /k \"%USERPROFILE%\\Local\\cmdrc.bat\""
   export PYTHONUNBUFFERED=yes
 elif [ "$machine" "==" "Mac" ]; then
   alias top="htop"
