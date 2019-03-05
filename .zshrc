@@ -16,7 +16,7 @@ esac
 
 if [ "$machine" "==" "Cygwin" ]; then
   alias open=cygstart
-  alias cmd="open cmd.exe /k \"%USERPROFILE%\\Local\\cmdrc.bat\""
+  alias cmd="open /cygdrive/c/WINDOWS/system32/cmd.exe \"/k $(cygpath -w ~/winhome/Local/cmdrc.bat) && cd $(cygpath -w $(pwd))\""
   export PYTHONUNBUFFERED=yes
 elif [ "$machine" "==" "Mac" ]; then
   alias top="htop"

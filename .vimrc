@@ -128,7 +128,6 @@ cabbrev gg
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-
 let g:airline_theme = 'base16_classic'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
@@ -144,7 +143,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_options = '--rcfile=.pylintrc'
+let g:ale_python_pylint_options = '--rcfile=' + getcwd() + '.pylintrc'
 let g:ale_python_pylint_use_global = 0
 let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
