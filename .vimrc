@@ -1,7 +1,9 @@
 " vundle _____________________________________________________________________
 
+" find OS name
 let os = substitute(system('uname'), "\n", "", "")
 
+" add Vundle to path and start
 if has("win32")
     set rtp+=$HOME/.vim/bundle/Vundle.vim/
     call vundle#begin('$HOME/.vim/bundle/')
@@ -10,6 +12,7 @@ else
     call vundle#begin()
 endif
 
+" plugins
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
@@ -47,21 +50,28 @@ filetype plugin indent on
 
 " defaults ___________________________________________________________________
 
+" ensure sensible defaults for vim8
 if v:version >= 800 && !has('nvim')
     source $VIMRUNTIME/defaults.vim
 endif
 set nocompatible
 filetype off
 
+" ignore non-text files when wildcard matching
 set wildignore+=*.aux,*.out,*.toc " LaTeX intermediate files
 set wildignore+=*.jpg,*.bmp,*.gif " binary images
 set wildignore+=*.wav,*.mp3,*.raw " binary audio
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
 set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
+
+" set options of completion
 set completeopt+=menuone,noinsert,noselect,preview
+
+" use vertical diff split by default
 set diffopt+=vertical
 
+" set netrw options
 let g:netrw_liststyle = 3     " tree
 let g:netrw_banner = 0        " no banner
 let g:netrw_altv = 1          " open files on right
@@ -74,7 +84,6 @@ let g:netrw_winsize = 20
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
-inoremap <esc> <nop>
 nnoremap * *Nzz
 nnoremap # #Nzz
 map <space> <leader>
@@ -99,8 +108,9 @@ nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
 nnoremap <leader>0 :tablast<cr>
-nnoremap <C-l> :tabnext<CR>
-nnoremap <C-h> :tabprevious<CR>
+" use l, h to go back and forward through tabs
+nnoremap <leader>l :tabnext<CR>
+nnoremap <leader>h :tabprevious<CR>
 
 " vimgrep recusively for current word in files of the same type
 cabbrev gg
@@ -118,7 +128,8 @@ cabbrev gg
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-let g:airline_theme = 'base16'
+
+let g:airline_theme = 'base16_classic'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline_section_x = ''
@@ -127,7 +138,9 @@ let g:airline_mode_map = {
     \'__' : '-', 'n'  : 'N', 'i'  : 'I', 'R'  : 'R',
     \'c'  : 'C', 'v'  : 'V', 'V'  : 'V', '^V' : 'V',
     \ 's'  : 'S', 'S'  : 'S', '^S' : 'S',}
+
 let g:vim_markdown_folding_disabled = 1
+
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
@@ -135,21 +148,30 @@ let g:ale_python_pylint_options = '--rcfile=.pylintrc'
 let g:ale_python_pylint_use_global = 0
 let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
-let g:python_highlight_all = 1
 let g:ale_set_loclist = 1
+
+let g:python_highlight_all = 1
+
 let g:presenting_top_margin = 2
+
 let g:jedi#popup_on_dot = 0
+
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-l>"
 let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
+
 let g:snips_author="Harvey Ormston"
 let g:snips_email="harveyormston@me.com"
 
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
+
 nmap <leader>a :AirlineToggle<CR>
 
 " whitespace _________________________________________________________________
@@ -227,22 +249,30 @@ autocmd CursorHold * checktime
 
 " colorscheme ________________________________________________________________
 
- try
-     colorscheme base16
- catch
-     colorscheme default
- endtry
+try
+    colorscheme base16
+catch
+    colorscheme default
+endtry
+
+if filereadable(expand("$HOME/.light"))
+    set bg=light
+else
+    set bg=dark
+endif
 
 hi clear SignColumn
+hi clear SpellBad
+
 hi ColorColumn ctermbg=18
 hi LineNr ctermfg=darkgrey
 hi VertSplit ctermbg=darkgrey ctermfg=black
 hi TabLineFill ctermfg=black ctermbg=black
 hi TabLine ctermfg=Blue ctermbg=black
 hi TabLineSel ctermfg=Red ctermbg=black
-hi clear SpellBad
 hi SpellBad cterm=underline ctermfg=black ctermbg=red
-
+hi Visual cterm=none ctermbg=blue ctermfg=black
+hi Search cterm=none ctermbg=red ctermfg=black
 
 " os-specific ________________________________________________________________
 
@@ -254,7 +284,6 @@ else
     set backupdir=$HOME/.vim/swapfiles//
     hi Normal ctermbg=none
     hi nonText ctermbg=NONE
-    hi Search cterm=NONE ctermfg=black ctermbg=white
 
     if &term =~ "screen"
         let &t_ti.="\eP\e[2 q\e\\"
@@ -326,6 +355,7 @@ fu! ToggleDiff()
         let g:diffmode = 'true'
     endif
 endfunction
+
 " end ________________________________________________________________________
 
 set exrc
