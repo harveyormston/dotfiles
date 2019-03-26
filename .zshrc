@@ -1,8 +1,8 @@
 export ZSH=$HOME/.oh-my-zsh
+plugins=(brew extract git git-extras osx pip python tmux vagrant vi-mode web-search wd)
 ZSH_DISABLE_COMPFIX=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
-plugins=(brew, extract, git, git-extras, osx, pip, python, tmux, vagrant, vi-mode, web-search, wd)
 source $ZSH/oh-my-zsh.sh
 
 unameOut="$(uname -s)"
