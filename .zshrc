@@ -19,9 +19,11 @@ if [ "$machine" "==" "Cygwin" ]; then
   alias open=cygstart
   export PYTHONUNBUFFERED=yes
 elif [ "$machine" "==" "Mac" ]; then
-  alias top="htop"
   export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
   export PATH="/Library/TeX/texbin:$PATH"
+  export PATH="/usr/local/sbin:$PATH"
+  export PATH="/usr/local/opt/qt/bin:$PATH"
+  alias top="htop"
   alias ctags="`brew --prefix`/bin/ctags"
 else
   alias top="htop"
