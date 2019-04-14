@@ -1,8 +1,8 @@
 export ZSH=$HOME/.oh-my-zsh
+plugins=(brew extract git git-extras osx pip python tmux vagrant vi-mode web-search wd)
 ZSH_DISABLE_COMPFIX=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
-plugins=(brew, extract, git, git-extras, osx, pip, python, tmux, vagrant, vi-mode, web-search, wd)
 source $ZSH/oh-my-zsh.sh
 
 unameOut="$(uname -s)"
@@ -15,8 +15,8 @@ case "${unameOut}" in
 esac
 
 if [ "$machine" "==" "Cygwin" ]; then
-  alias cmd="~/win/local/cmder/Cmder.exe"
   alias open=cygstart
+  alias cmd="open /cygdrive/c/WINDOWS/system32/cmd.exe \"/k $(cygpath -w ~/winhome/Local/cmdrc.bat) && cd $(cygpath -w $(pwd))\""
   export PYTHONUNBUFFERED=yes
 elif [ "$machine" "==" "Mac" ]; then
   export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"

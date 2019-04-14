@@ -33,6 +33,7 @@ Plugin 'will133/vim-dirdiff'
 Plugin 'vim-python/python-syntax'
 Plugin 'PeterRincker/vim-argumentative'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'mzlogin/vim-markdown-toc'
 Plugin 'rust-lang/rust.vim'
 Plugin 'jmcantrell/vim-virtualenv'
 Plugin 'samsaga2/vim-z80'
@@ -127,7 +128,6 @@ cabbrev gg
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
-
 let g:airline_theme = 'base16_classic'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
@@ -143,7 +143,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_options = '--rcfile=.pylintrc'
+let g:ale_python_pylint_options = '--rcfile=' + getcwd() + '.pylintrc'
 let g:ale_python_pylint_use_global = 0
 let g:ale_python_flake8_use_global = 0
 let g:ale_python_mypy_use_global = 0
@@ -209,7 +209,7 @@ autocmd Filetype python autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
-autocmd Filetype markdown setlocal makeprg=grip\ %\ 80\ --user-content\ -b\ &&\
+autocmd Filetype markdown setlocal makeprg=grip\ %\ 80\ --quiet\ --user-content\ -b\ &&\
 autocmd Filetype make setlocal ts=4 sts=0 sw=4 noexpandtab
 autocmd Filetype tex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
