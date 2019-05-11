@@ -7,8 +7,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     cd $DIR
 
-    git submodule init
-    git submodule update
+    git submodule update --init --recursive
 
     git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 
