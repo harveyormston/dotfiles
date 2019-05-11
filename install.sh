@@ -24,7 +24,7 @@ then
     ln -s -f $DIR/.vim ~/.vim
     ln -s -f $DIR/.vimrc ~/.vimrc
     ln -s -f $DIR/.zshrc ~/.zshrc
-    ln -s -f $DIR/gitignore_global ~/.gitignore
+    ln -s -f $DIR/.gitignore_global ~/.gitignore
 
     cd $DIR/oh-my-zsh/tools
     ./install.sh
