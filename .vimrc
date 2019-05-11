@@ -89,8 +89,6 @@ nnoremap # #Nzz
 map <space> <leader>
 nmap <leader>\| :vsp<CR>
 nmap <leader>- :sp<CR>
-nmap <leader>l :set bg=light<CR>
-nmap <leader>k :set bg=dark<CR>
 nmap <leader>e :call ToggleVex()<CR>
 nmap <leader>c :call ToggleDiff()<CR>
 nmap <leader>m :MRU<CR>
@@ -254,8 +252,15 @@ catch
     colorscheme default
 endtry
 
-if filereadable(expand("$HOME/.light"))
-    set bg=light
+" set light background if 'light' is in the current base16 theme name
+let base16_theme = resolve(expand("$HOME/.base16_theme"))
+
+if filereadable(base16_theme)
+    if base16_theme =~ 'light'
+        set bg=light
+    else
+        set bg=dark
+    endif
 else
     set bg=dark
 endif
