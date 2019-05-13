@@ -9,10 +9,10 @@ if [ "$(uname)" == "Darwin" ]; then
   total_charge=$(echo $battery_info | grep -o '"MaxCapacity" = [0-9]\+' | awk '{print $3}')
   state=$(echo $battery_info | grep -o '"ExternalConnected" = [Yes|No]' | awk '{print $3}')
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  current_charge=$(cat /proc/acpi/battery/BAT1/state | grep 'remaining capacity' | awk '{print $3}')
-  total_charge=$(cat /proc/acpi/battery/BAT1/info | grep 'last full capacity' | awk '{print $4}')
-  state=$(cat /proc/acpi/battery/BAT1/info | grep 'charging state' | awk '{print $4}')
-  if [[ "$state" == 'discharging' || "$state" == 'charged'  ]]; then
+  current_charge=$(cat /sys/class/power_supply/battery/capacity)
+  total_charge="100"
+  state=$(cat /sys/class/power_supply/battery/status)
+  if [[ "$state" == 'Not charging' ]]; then
       state="N"
   else
       state="Y"
