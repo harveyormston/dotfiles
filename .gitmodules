@@ -8,4 +8,4 @@
     ignore = dirty
 [submodule "tpm"]
 	path = tpm
-	url = ./tpm
+	url = https://github.com/tmux-plugins/tpm.git

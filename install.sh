@@ -7,8 +7,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     cd $DIR
 
-    git submodule init
-    git submodule update
+    git submodule update --init --recursive
 
     git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 
@@ -25,7 +24,7 @@ then
     ln -s -f $DIR/.vim ~/.vim
     ln -s -f $DIR/.vimrc ~/.vimrc
     ln -s -f $DIR/.zshrc ~/.zshrc
-    ln -s -f $DIR/gitignore_global ~/.gitignore
+    ln -s -f $DIR/.gitignore_global ~/.gitignore
 
     cd $DIR/oh-my-zsh/tools
     ./install.sh
