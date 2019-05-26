@@ -92,6 +92,7 @@ nmap <leader>- :sp<CR>
 nmap <leader>e :call ToggleVex()<CR>
 nmap <leader>c :call ToggleDiff()<CR>
 nmap <leader>m :MRU<CR>
+nmap <leader>o :tabnew<CR>
 nnoremap <leader>b :buffers<CR>:buffer<Space>
 set pastetoggle=<leader>p
 
@@ -106,9 +107,14 @@ nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
 nnoremap <leader>0 :tablast<cr>
+
 " use l, h to go back and forward through tabs
 nnoremap <leader>l :tabnext<CR>
 nnoremap <leader>h :tabprevious<CR>
+
+" use j, k to go back and forward through buffers
+nnoremap <leader>j :bn<CR>
+nnoremap <leader>k :bp<CR>
 
 " vimgrep recusively for current word in files of the same type
 cabbrev gg
@@ -127,6 +133,7 @@ cabbrev gg
 
 let g:switch_mapping = "+"
 let g:airline_theme = 'base16_classic'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline_section_x = ''
@@ -138,14 +145,14 @@ let g:airline_mode_map = {
 
 let g:vim_markdown_folding_disabled = 1
 
+let g:ale_linters = {'python': ['pylint']}
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_options = '--rcfile=' + getcwd() + '.pylintrc'
-let g:ale_python_pylint_use_global = 0
-let g:ale_python_flake8_use_global = 0
-let g:ale_python_mypy_use_global = 0
+let g:ale_python_pylint_use_global = 1
 let g:ale_set_loclist = 1
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
 
 let g:python_highlight_all = 1
 
@@ -214,6 +221,8 @@ autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 
 " general ____________________________________________________________________
 
+syntax on
+
 set nocompatible
 set autoread
 set wildmenu
@@ -225,7 +234,6 @@ set smartcase
 set hlsearch
 set lazyredraw
 set ruler
-syntax on
 set number
 set relativenumber
 set showcmd
@@ -245,7 +253,7 @@ set tags=./tags;/
 autocmd CursorHold * checktime
 
 " colorscheme ________________________________________________________________
-
+let base16colorspace=256
 try
     colorscheme base16
 catch
@@ -254,7 +262,6 @@ endtry
 
 " set light background if 'light' is in the current base16 theme name
 let base16_theme = resolve(expand("$HOME/.base16_theme"))
-
 if filereadable(base16_theme)
     if base16_theme =~ 'light'
         set bg=light
