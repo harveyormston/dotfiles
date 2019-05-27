@@ -45,6 +45,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'harveyormston/vim-snippets'
 Plugin 'chriskempson/base16-vim'
 Plugin 'unblevable/quick-scope'
+Plugin 'vimwiki/vimwiki'
 call vundle#end()
 filetype plugin indent on
 
@@ -178,6 +179,8 @@ xmap <leader>t :TagbarToggle<CR>
 
 nmap <leader>a :AirlineToggle<CR>
 
+let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
+
 " whitespace _________________________________________________________________
 
 set tabstop=4
@@ -214,7 +217,7 @@ autocmd Filetype python autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
-autocmd Filetype markdown setlocal makeprg=grip\ %\ 80\ --quiet\ --user-content\ -b\ &&\
+autocmd Filetype markdown setlocal makeprg=grip\ \"%\"\ --user-content\ -b\ &&\
 autocmd Filetype make setlocal ts=4 sts=0 sw=4 noexpandtab
 autocmd Filetype tex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
