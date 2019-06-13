@@ -130,6 +130,24 @@ cabbrev gg
 " fancy git log
 :command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
 
+" scientific calculator
+if has('python3')
+    :command! -nargs=+ Calc :py3 print(<args>)
+    :py3 from math import *
+else
+    :command! -nargs=+ Calc :py print <args>
+    :py from math import *
+endif
+
+" convert to/from hex
+:command! -nargs=1 FromHex :echo <args>
+:command! -nargs=1 ToHex :echo printf('%x', <args>)
+
+" convert to/from log domain
+:command! -nargs=1 FromLog :Calc 10**(<args>/20)
+:command! -nargs=1 ToLog :Calc 20*log10(<args>)
+
+
 " plugin_config ______________________________________________________________
 
 let g:switch_mapping = "+"
