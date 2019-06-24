@@ -12,140 +12,38 @@ else
     call vundle#begin()
 endif
 
-" plugins
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'w0rp/ale'
-Plugin 'AndrewRadev/switch.vim'
-Plugin 'fidian/hexmode'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'dietsche/vim-lastplace'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'yegappan/mru'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'will133/vim-dirdiff'
-Plugin 'vim-python/python-syntax'
-Plugin 'PeterRincker/vim-argumentative'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'mzlogin/vim-markdown-toc'
-Plugin 'rust-lang/rust.vim'
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'samsaga2/vim-z80'
-Plugin 'chrisbra/csv.vim'
-Plugin 'sotte/presenting.vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'SirVer/ultisnips'
-Plugin 'harveyormston/vim-snippets'
-Plugin 'chriskempson/base16-vim'
-Plugin 'unblevable/quick-scope'
-Plugin 'vimwiki/vimwiki'
+
+" plugins ____________________________________________________________________
+
+Plugin 'VundleVim/Vundle.vim'            " plugin manager
+Plugin 'tpope/vim-surround'              " deal with pairs of surroundings
+Plugin 'tpope/vim-commentary'            " comment stuff out/in
+Plugin 'tpope/vim-repeat'                " dot operator tools
+Plugin 'tpope/vim-fugitive'              " git client
+Plugin 'ntpeters/vim-better-whitespace'  " highlight trailing whitespace characters
+Plugin 'w0rp/ale'                        " asynchronous linting engine
+Plugin 'AndrewRadev/switch.vim'          " true<->false, etc
+Plugin 'fidian/hexmode'                  " improved hex editing
+Plugin 'vim-airline/vim-airline'         " draw a nice statusline at the bottom of each window
+Plugin 'vim-airline/vim-airline-themes'  " airline themes
+Plugin 'dietsche/vim-lastplace'          " intelligently reopen files where you left off
+Plugin 'jiangmiao/auto-pairs'            " insert or delete brackets, parens, quotes in pair
+Plugin 'yegappan/mru'                    " access most recently used files
+Plugin 'PeterRincker/vim-argumentative'  " aids with manipulating and moving between function arguments
+Plugin 'plasticboy/vim-markdown'         " markdown syntax
+Plugin 'chrisbra/csv.vim'                " handling column separated data
+Plugin 'majutsushi/tagbar'               " browsing the tags of source code files
+Plugin 'davidhalter/jedi-vim'            " jedi python autocompletion
+Plugin 'SirVer/ultisnips'                " snippet management
+Plugin 'harveyormston/vim-snippets'      " my snippets
+Plugin 'chriskempson/base16-vim'         " base16 colorschemes
+Plugin 'unblevable/quick-scope'          " highlight a unique character in every word on a line
+Plugin 'vimwiki/vimwiki'                 " a personal wiki
+Plugin 'vim-python/python-syntax'        " python syntax
+Plugin 'TaDaa/vimade'                    " dim inactive split panes
+
 call vundle#end()
 filetype plugin indent on
-
-" defaults ___________________________________________________________________
-
-" ensure sensible defaults for vim8
-if v:version >= 800 && !has('nvim')
-    source $VIMRUNTIME/defaults.vim
-endif
-set nocompatible
-filetype off
-
-" ignore non-text files when wildcard matching
-set wildignore+=*.aux,*.out,*.toc " LaTeX intermediate files
-set wildignore+=*.jpg,*.bmp,*.gif " binary images
-set wildignore+=*.wav,*.mp3,*.raw " binary audio
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
-set wildignore+=*.pyc " Python byte code
-set wildignore+=*.sw? " Vim swap files
-
-" set options of completion
-set completeopt+=menuone,noinsert,noselect,preview
-
-" use vertical diff split by default
-set diffopt+=vertical
-
-" set netrw options
-let g:netrw_liststyle = 3     " tree
-let g:netrw_banner = 0        " no banner
-let g:netrw_altv = 1          " open files on right
-let g:netrw_preview = 1       " open previews vertically
-let g:netrw_browse_split = 4
-let g:netrw_winsize = 20
-
-" keymap _____________________________________________________________________
-
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-inoremap jk <esc>
-nnoremap * *Nzz
-nnoremap # #Nzz
-map <space> <leader>
-nmap <leader>\| :vsp<CR>
-nmap <leader>- :sp<CR>
-nmap <leader>e :call ToggleVex()<CR>
-nmap <leader>c :call ToggleDiff()<CR>
-nmap <leader>m :MRU<CR>
-nmap <leader>o :tabnew<CR>
-nnoremap <leader>b :buffers<CR>:buffer<Space>
-set pastetoggle=<leader>p
-
-" Go to tab by number
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
-nnoremap <leader>0 :tablast<cr>
-
-" use l, h to go back and forward through tabs
-nnoremap <leader>l :tabnext<CR>
-nnoremap <leader>h :tabprevious<CR>
-
-" use j, k to go back and forward through buffers
-nnoremap <leader>j :bn<CR>
-nnoremap <leader>k :bp<CR>
-
-" vimgrep recusively for current word in files of the same type
-cabbrev gg
-      \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
-      \ ./**/*<C-R>=(expand("%:e")=="" ? "" : ".".expand("%:e"))<CR>
-      \ <Bar> copen
-      \ <C-Left><C-Left><C-Left>
-
-" cd to directory of current file
-:command! CD cd %:p:h
-
-" fancy git log
-:command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
-
-" scientific calculator
-if has('python3')
-    :command! -nargs=+ Calc :py3 print(<args>)
-    :py3 from math import *
-else
-    :command! -nargs=+ Calc :py print <args>
-    :py from math import *
-endif
-
-" convert to/from hex
-:command! -nargs=1 FromHex :echo <args>
-:command! -nargs=1 ToHex :echo printf('%x', <args>)
-
-" convert to/from log domain
-:command! -nargs=1 FromLog :Calc 10**(<args>/20)
-:command! -nargs=1 ToLog :Calc 20*log10(<args>)
 
 
 " plugin_config ______________________________________________________________
@@ -189,17 +87,123 @@ let g:snips_email="harveyormston@me.com"
 
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
+
+
+" defaults ___________________________________________________________________
+
+" ensure sensible defaults for vim8
+if v:version >= 800 && !has('nvim')
+    source $VIMRUNTIME/defaults.vim
+endif
+set nocompatible
+filetype off
+
+" ignore non-text files when wildcard matching
+set wildignore+=*.aux,*.out,*.toc " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif " binary images
+set wildignore+=*.wav,*.mp3,*.raw " binary audio
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.pyc " Python byte code
+set wildignore+=*.sw? " Vim swap files
+
+" set options of completion
+set completeopt=menuone,preview
+
+" use vertical diff split by default
+set diffopt+=vertical
+
+" set netrw options
+let g:netrw_liststyle = 3     " tree
+let g:netrw_banner = 0        " no banner
+let g:netrw_altv = 1          " open files on right
+let g:netrw_preview = 1       " open previews vertically
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 20
+
+
+" key mappings ________________________________________________________________
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+inoremap jk <esc>
+tnoremap jk <C-\><C-n>
+nnoremap * *Nzz
+nnoremap # #Nzz
+
+
+" leader mappings _____________________________________________________________
+
+map <space> <leader>
+nmap <leader>\| :vsp<CR>
+nmap <leader>- :sp<CR>
+nmap <leader>e :call ToggleVex()<CR>
+nmap <leader>c :call ToggleDiff()<CR>
+nmap <leader>w :ToggleWhitespace<CR>
+nmap <leader>m :MRU<CR>
+nmap <leader>o :tabnew<CR>
+nnoremap <leader>b :buffers<CR>:buffer<Space>
+set pastetoggle=<leader>p
+
+" Go to tab by number
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+nnoremap <leader>0 :tablast<cr>
+
+" use l, h to go back and forward through tabs
+nnoremap <leader>l :tabnext<CR>
+nnoremap <leader>h :tabprevious<CR>
+
+" use j, k to go back and forward through buffers
+nnoremap <leader>j :bn<CR>
+nnoremap <leader>k :bp<CR>
 
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
-
 nmap <leader>a :AirlineToggle<CR>
 
-let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 
-" whitespace _________________________________________________________________
+" commands ___________________________________________________________________
+
+" vimgrep recusively for current word in files of the same type
+cabbrev gg
+      \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
+      \ ./**/*<C-R>=(expand("%:e")=="" ? "" : ".".expand("%:e"))<CR>
+      \ <Bar> copen
+      \ <C-Left><C-Left><C-Left>
+
+" cd to directory of current file
+:command! CD cd %:p:h
+
+" fancy git log
+:command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
+
+" scientific calculator
+if has('python3')
+    :command! -nargs=+ Calc :py3 print(<args>)
+    :py3 from math import *
+else
+    :command! -nargs=+ Calc :py from __future__ import division; print <args>
+    :py from math import *
+endif
+
+" convert to/from hex
+:command! -nargs=1 FromHex :echo <args>
+:command! -nargs=1 ToHex :echo printf('%x', <args>)
+
+" convert to/from log domain
+:command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
+:command! -nargs=1 ToLog :Calc 20*log10(<args>)
+
+
+" whitespace defaults _________________________________________________________
 
 set tabstop=4
 set softtabstop=4
@@ -207,7 +211,8 @@ set shiftwidth=4
 set expandtab
 set nowrap
 
-" filetype-specific _________________________________________________________
+
+" filetype-specific ___________________________________________________________
 
 " unknown
 autocmd BufNewFile,BufRead * if expand('%:t') !~ '\.' | set ft=unknown | endif
@@ -240,7 +245,13 @@ autocmd Filetype make setlocal ts=4 sts=0 sw=4 noexpandtab
 autocmd Filetype tex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 
-" general ____________________________________________________________________
+" terminal
+if has('nvim')
+    au TermOpen * setlocal nonumber norelativenumber
+endif
+
+
+" set options _________________________________________________________________
 
 syntax on
 
@@ -273,7 +284,9 @@ endif
 set tags=./tags;/
 autocmd CursorHold * checktime
 
+
 " colorscheme ________________________________________________________________
+
 let base16colorspace=256
 try
     colorscheme base16
@@ -306,6 +319,7 @@ hi SpellBad cterm=underline ctermfg=black ctermbg=red
 hi Visual cterm=none ctermbg=blue ctermfg=black
 hi Search cterm=none ctermbg=red ctermfg=black
 
+
 " os-specific ________________________________________________________________
 
 if has("win32")
@@ -336,6 +350,9 @@ if has("win32unix")
     let g:ale_python_pylint_executable = '/usr/bin/pylint'
     let g:ale_python_flake8_executable = '/usr/bin/flake8'
 endif
+
+
+" functinos __________________________________________________________________
 
 " save/load session __________________________________________________________
 
