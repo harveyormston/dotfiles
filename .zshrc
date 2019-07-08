@@ -1,7 +1,7 @@
 export ZSH=$HOME/.oh-my-zsh
 plugins=(brew extract git git-extras osx pip python tmux vagrant vi-mode web-search wd)
 ZSH_DISABLE_COMPFIX=true
-ZSH_TMUX_AUTOSTART=true
+# ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
 source $ZSH/oh-my-zsh.sh
 
@@ -53,10 +53,6 @@ else
     session=local
 fi
 
-if [ "$TMUX" = "" ] && [ "$session" "==" "local" ]; then
-  exec tmux
-fi
-
 if hash nvim 2>/dev/null; then
     alias ovim=$(which vim)
     alias vim="nvim"
@@ -97,3 +93,11 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 echo -e -n "\x1b[\x34 q"
+
+if [ "$TMUX" = "" ] && [ "$session" "==" "local" ]; then
+    echo -n "start tmux [Y|n]?"
+    read start_tmux
+    if [[ "$start_tmux" != "n" ]]; then
+        exec tmux
+    fi
+fi
