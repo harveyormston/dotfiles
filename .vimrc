@@ -121,6 +121,13 @@ let g:netrw_preview = 1       " open previews vertically
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
 
+" use system clipboard, but not for x/X
+if has('clipboard')
+    set clipboard=unnamedplus
+    noremap x "_x
+    noremap X "_X
+endif
+
 
 " key mappings ________________________________________________________________
 

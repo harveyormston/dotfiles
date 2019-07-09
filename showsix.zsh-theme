@@ -84,7 +84,6 @@ theme_git_prompt () {
 }
 
 
-# _PATH="%{$fg_bold[white]%}%~%{$reset_color%}"
 # Limit path to 40 characters
 _PATH="%{$fg_bold[white]%}%40<...<%~%<<%{$reset_color%}"
 
