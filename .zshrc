@@ -5,6 +5,13 @@ ZSH_DISABLE_COMPFIX=true
 ZSH_THEME="showsix"
 source $ZSH/oh-my-zsh.sh
 
+function open_win() {
+    f=$1
+    cp "$f" ~/winhome/tmp/
+    b=$(basename $f)
+    cmd.exe /c "tmp\\$b"
+}
+
 unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     machine=Linux;;
@@ -30,7 +37,9 @@ elif [ "$machine" "==" "Mac" ]; then
   alias ctags="`brew --prefix`/bin/ctags"
 
 else
+  alias open=open_win
   alias top="htop"
+  alias ls="ls --color=no"
 fi
 
 export PATH="~/.bin:$PATH"
@@ -95,6 +104,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 echo -e -n "\x1b[\x34 q"
+zstyle ':completion:*' list-colors
 
 if [ "$TMUX" = "" ] && [ "$session" "==" "local" ]; then
     echo -n "start tmux [Y|n]?"

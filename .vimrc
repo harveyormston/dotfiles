@@ -217,6 +217,57 @@ endif
 :command! -nargs=1 ToLog :Calc 20*log10(<args>)
 
 
+" plugin_config ______________________________________________________________
+
+let g:switch_mapping = "+"
+let g:airline_theme = 'base16_default'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_inactive_collapse=0
+let g:airline_powerline_fonts = 0
+let g:airline_section_x = ''
+let g:airline_section_y = ''
+let g:airline_mode_map = {
+    \'__' : '-', 'n'  : 'N', 'i'  : 'I', 'R'  : 'R',
+    \'c'  : 'C', 'v'  : 'V', 'V'  : 'V', '^V' : 'V',
+    \ 's'  : 'S', 'S'  : 'S', '^S' : 'S',}
+
+let g:vim_markdown_folding_disabled = 1
+
+let g:ale_linters = {'python': ['pylint']}
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_python_pylint_use_global = 1
+let g:ale_set_loclist = 1
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+
+let g:python_highlight_all = 1
+
+let g:presenting_top_margin = 2
+
+let g:jedi#popup_on_dot = 0
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+let g:UltiSnipsSnippetDirectories=["mysnippets"]
+
+let g:snips_author="Harvey Ormston"
+let g:snips_email="harveyormston@me.com"
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+nmap <leader>t :TagbarToggle<CR>
+xmap <leader>t :TagbarToggle<CR>
+
+nmap <leader>a :AirlineToggle<CR>
+
+let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
+
 " whitespace defaults _________________________________________________________
 
 set tabstop=4
