@@ -44,6 +44,8 @@ if [ -n "$VIRTUAL_ENV" ]; then
 else
   if [ -e ~/.virtualenvs/default ]; then
     source ~/.virtualenvs/default
+  elif [ -e ~/.venv/default ]; then
+    source ~/.venv/default
   fi
 fi
 
