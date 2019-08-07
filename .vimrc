@@ -106,12 +106,19 @@ set wildignore+=*.wav,*.mp3,*.raw " binary audio
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
 set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
+set wildignore+=**/build/** " Python build files
+set wildignore+=**/dist/** " Python dist files
 
 " set options of completion
 set completeopt=menuone,preview
 
 " use vertical diff split by default
 set diffopt+=vertical
+
+" set nicer diff options
+if has('nvim-0.3.2') || has("patch-8.1.0360")
+    set diffopt=filler,internal,algorithm:patience,indent-heuristic
+endif
 
 " set netrw options
 let g:netrw_liststyle = 3     " tree
@@ -264,7 +271,9 @@ syntax on
 
 set nocompatible
 set autoread
+set path+=**
 set wildmenu
+set hidden
 set backspace=indent,eol,start
 set autoindent
 set incsearch
