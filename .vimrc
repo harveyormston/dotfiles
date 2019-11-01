@@ -45,51 +45,6 @@ Plugin 'TaDaa/vimade'                    " dim inactive split panes
 call vundle#end()
 filetype plugin indent on
 
-
-" plugin_config ______________________________________________________________
-
-let g:switch_mapping = "+"
-let g:airline_theme = 'base16_classic'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_inactive_collapse=0
-let g:airline_powerline_fonts = 0
-let g:airline_section_x = ''
-let g:airline_section_y = ''
-let g:airline_mode_map = {
-    \'__' : '-', 'n'  : 'N', 'i'  : 'I', 'R'  : 'R',
-    \'c'  : 'C', 'v'  : 'V', 'V'  : 'V', '^V' : 'V',
-    \ 's'  : 'S', 'S'  : 'S', '^S' : 'S',}
-
-let g:vim_markdown_folding_disabled = 1
-
-let g:ale_linters = {'python': ['pylint']}
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_use_global = 1
-let g:ale_set_loclist = 1
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-
-let g:python_highlight_all = 1
-
-let g:presenting_top_margin = 2
-
-let g:jedi#popup_on_dot = 0
-
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-l>"
-let g:UltiSnipsJumpBackwardTrigger="<c-h>"
-let g:UltiSnipsSnippetDirectories=["mysnippets"]
-
-let g:snips_author="Harvey Ormston"
-let g:snips_email="harveyormston@me.com"
-
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
-
-
 " defaults ___________________________________________________________________
 
 " ensure sensible defaults for vim8
@@ -111,6 +66,8 @@ set wildignore+=**/dist/** " Python dist files
 
 " set options of completion
 set completeopt=menuone,preview
+set complete-=i
+set complete-=d
 
 " use vertical diff split by default
 set diffopt+=vertical
@@ -141,7 +98,9 @@ endif
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
-tnoremap jk <C-\><C-n>
+if has('nvim')
+    tnoremap jk <C-\><C-n>
+endif
 nnoremap * *Nzz
 nnoremap # #Nzz
 
@@ -237,7 +196,7 @@ let g:ale_linters = {'python': ['pylint']}
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_use_global = 1
+let g:ale_python_pylint_use_global = 0
 let g:ale_set_loclist = 1
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
@@ -257,9 +216,6 @@ let g:snips_author="Harvey Ormston"
 let g:snips_email="harveyormston@me.com"
 
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
 
 nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
@@ -348,7 +304,7 @@ if has('persistent_undo')
     set undodir=$HOME/.vim/undo
 endif
 
-set tags=./tags;/
+set tags=~/.tags
 autocmd CursorHold * checktime
 
 
