@@ -1,8 +1,5 @@
 " vundle _____________________________________________________________________
 
-" find OS name
-let os = substitute(system('uname'), "\n", "", "")
-
 " add Vundle to path and start
 if has("win32")
     set rtp+=$HOME/.vim/bundle/Vundle.vim/
@@ -20,6 +17,9 @@ Plugin 'tpope/vim-surround'              " deal with pairs of surroundings
 Plugin 'tpope/vim-commentary'            " comment stuff out/in
 Plugin 'tpope/vim-repeat'                " dot operator tools
 Plugin 'tpope/vim-fugitive'              " git client
+Plugin 'tpope/vim-dispatch'              " build and test
+Plugin 'alfredodeza/pytest.vim'          " pytest
+Plugin '5long/pytest-vim-compiler'       " pytest compiler plugin for dispatch
 Plugin 'ntpeters/vim-better-whitespace'  " highlight trailing whitespace characters
 Plugin 'w0rp/ale'                        " asynchronous linting engine
 Plugin 'AndrewRadev/switch.vim'          " true<->false, etc
@@ -41,9 +41,50 @@ Plugin 'unblevable/quick-scope'          " highlight a unique character in every
 Plugin 'vimwiki/vimwiki'                 " a personal wiki
 Plugin 'vim-python/python-syntax'        " python syntax
 Plugin 'TaDaa/vimade'                    " dim inactive split panes
+Plugin 'justinj/vim-pico8-syntax'        " Pico8 Lua syntax
+
 
 call vundle#end()
 filetype plugin indent on
+
+" plugin_config ______________________________________________________________
+
+" Airline
+let g:switch_mapping = "+"
+let g:airline_theme = 'base16_atelierdune'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_inactive_collapse=0
+let g:airline_powerline_fonts = 0
+
+" ALE
+let g:ale_linters = {'python': ['pylint']}
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_python_pylint_use_global = 1
+let g:ale_set_loclist = 1
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+
+" Snippets
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+let g:UltiSnipsSnippetDirectories=["mysnippets"]
+let g:snips_author="Harvey Ormston"
+let g:snips_email="harveyormston@me.com"
+
+" Others
+let g:python_highlight_all = 1
+let g:jedi#popup_on_dot = 0
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vim_markdown_folding_disabled = 1
+
+nmap <leader>t :TagbarToggle<CR>
+xmap <leader>t :TagbarToggle<CR>
+nmap <leader>a :AirlineToggle<CR>
+
 
 " defaults ___________________________________________________________________
 
@@ -70,11 +111,10 @@ set complete-=i
 set complete-=d
 
 " use vertical diff split by default
-set diffopt+=vertical
-
 " set nicer diff options
-if has('nvim-0.3.2') || has("patch-8.1.0360")
-    set diffopt=filler,internal,algorithm:patience,indent-heuristic
+set diffopt=vertical,filler
+if has('nvim')
+    set diffopt+=internal,algorithm:patience,indent-heuristic
 endif
 
 " set netrw options
@@ -85,12 +125,38 @@ let g:netrw_preview = 1       " open previews vertically
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
 
-" use system clipboard, but not for x/X
-if has('clipboard')
-    set clipboard=unnamedplus
-    noremap x "_x
-    noremap X "_X
+syntax on
+
+set nocompatible
+set autoread
+set path+=**
+set wildmenu
+set hidden
+set backspace=indent,eol,start
+set autoindent
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+set lazyredraw
+set ruler
+set number
+set relativenumber
+set showcmd
+set laststatus=2
+set swapfile
+
+if has('mouse')
+    set mouse=n
 endif
+
+if has('persistent_undo')
+    set undofile
+    set undodir=$HOME/.vim/undo
+endif
+
+set tags=~/.tags
+autocmd CursorHold * checktime
 
 
 " key mappings ________________________________________________________________
@@ -99,6 +165,7 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
 if has('nvim')
+    " map jk for terminal in neovim
     tnoremap jk <C-\><C-n>
 endif
 nnoremap * *Nzz
@@ -108,27 +175,22 @@ nnoremap # #Nzz
 " leader mappings _____________________________________________________________
 
 map <space> <leader>
+
+" splits
 nmap <leader>\| :vsp<CR>
 nmap <leader>- :sp<CR>
+
+" toggles
 nmap <leader>e :call ToggleVex()<CR>
-nmap <leader>c :call ToggleDiff()<CR>
+nmap <leader>d :call ToggleDiff()<CR>
 nmap <leader>w :ToggleWhitespace<CR>
 nmap <leader>m :MRU<CR>
-nmap <leader>o :tabnew<CR>
-nnoremap <leader>b :buffers<CR>:buffer<Space>
+
 set pastetoggle=<leader>p
 
-" Go to tab by number
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
-nnoremap <leader>0 :tablast<cr>
+" tabs and buffers
+nmap <leader>o :tabnew<CR>
+nnoremap <leader>b :buffers<CR>:buffer<Space>
 
 " use l, h to go back and forward through tabs
 nnoremap <leader>l :tabnext<CR>
@@ -142,6 +204,9 @@ nmap <leader>t :TagbarToggle<CR>
 xmap <leader>t :TagbarToggle<CR>
 nmap <leader>a :AirlineToggle<CR>
 
+" cd to directory of current file
+nnoremap <leader>cd :cd %:p:h
+
 
 " commands ___________________________________________________________________
 
@@ -152,18 +217,15 @@ cabbrev gg
       \ <Bar> copen
       \ <C-Left><C-Left><C-Left>
 
-" cd to directory of current file
-:command! CD cd %:p:h
-
 " fancy git log
 :command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
 
-" scientific calculator
+" calculator
 if has('python3')
     :command! -nargs=+ Calc :py3 print(<args>)
     :py3 from math import *
 else
-    :command! -nargs=+ Calc :py from __future__ import division; print <args>
+    :command! -nargs=+ Calc :py from __future__ import division, print_function; print(<args>)
     :py from math import *
 endif
 
@@ -175,54 +237,6 @@ endif
 :command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
 :command! -nargs=1 ToLog :Calc 20*log10(<args>)
 
-
-" plugin_config ______________________________________________________________
-
-let g:switch_mapping = "+"
-let g:airline_theme = 'base16_default'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_inactive_collapse=0
-let g:airline_powerline_fonts = 0
-let g:airline_section_x = ''
-let g:airline_section_y = ''
-let g:airline_mode_map = {
-    \'__' : '-', 'n'  : 'N', 'i'  : 'I', 'R'  : 'R',
-    \'c'  : 'C', 'v'  : 'V', 'V'  : 'V', '^V' : 'V',
-    \ 's'  : 'S', 'S'  : 'S', '^S' : 'S',}
-
-let g:vim_markdown_folding_disabled = 1
-
-let g:ale_linters = {'python': ['pylint']}
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_use_global = 0
-let g:ale_set_loclist = 1
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-
-let g:python_highlight_all = 1
-
-let g:presenting_top_margin = 2
-
-let g:jedi#popup_on_dot = 0
-
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-l>"
-let g:UltiSnipsJumpBackwardTrigger="<c-h>"
-let g:UltiSnipsSnippetDirectories=["mysnippets"]
-
-let g:snips_author="Harvey Ormston"
-let g:snips_email="harveyormston@me.com"
-
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-nmap <leader>t :TagbarToggle<CR>
-xmap <leader>t :TagbarToggle<CR>
-
-nmap <leader>a :AirlineToggle<CR>
-
-let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 
 " whitespace defaults _________________________________________________________
 
@@ -257,11 +271,13 @@ autocmd Filetype python setlocal makeprg=pylint\ --reports=n\ --output-format=pa
 autocmd Filetype python setlocal errorformat=%f:%l:\ %m
 autocmd Filetype python autocmd QuickFixCmdPost [^l]* nested cwindow
 
-" other
-autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
+" markdown
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
 autocmd Filetype markdown setlocal makeprg=grip\ \"%\"\ --user-content\ -b\ &&\
+
+" other
+autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype make setlocal ts=4 sts=0 sw=4 noexpandtab
 autocmd Filetype tex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
@@ -270,42 +286,6 @@ autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 if has('nvim')
     au TermOpen * setlocal nonumber norelativenumber
 endif
-
-
-" set options _________________________________________________________________
-
-syntax on
-
-set nocompatible
-set autoread
-set path+=**
-set wildmenu
-set hidden
-set backspace=indent,eol,start
-set autoindent
-set incsearch
-set ignorecase
-set smartcase
-set hlsearch
-set lazyredraw
-set ruler
-set number
-set relativenumber
-set showcmd
-set laststatus=2
-set swapfile
-
-if has('mouse')
-    set mouse=n
-endif
-
-if has('persistent_undo')
-    set undofile
-    set undodir=$HOME/.vim/undo
-endif
-
-set tags=~/.tags
-autocmd CursorHold * checktime
 
 
 " colorscheme ________________________________________________________________
@@ -343,7 +323,7 @@ hi Visual cterm=none ctermbg=blue ctermfg=black
 hi Search cterm=none ctermbg=red ctermfg=black
 
 
-" os-specific ________________________________________________________________
+" os/terminal specific _______________________________________________________
 
 if has("win32")
     set directory=$HOME/.vim/swapfiles//
@@ -375,7 +355,7 @@ if has("win32unix")
 endif
 
 
-" functinos __________________________________________________________________
+" functions __________________________________________________________________
 
 " save/load session __________________________________________________________
 

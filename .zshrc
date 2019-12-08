@@ -64,13 +64,7 @@ else
     session=local
 fi
 
-if hash nvim 2>/dev/null; then
-    alias ovim=$(which vim)
-    alias vim="nvim"
-    export EDITOR=$(which nvim)
-else
-    export EDITOR=$(which vim)
-fi
+export EDITOR=$(which vim)
 
 # Use vi mode
 bindkey -v
