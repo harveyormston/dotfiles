@@ -39,7 +39,8 @@ elif [ "$machine" "==" "Mac" ]; then
 else
   alias open=open_win
   alias top="htop"
-  alias ls="ls --color=no"
+  export LS_COLORS='ow=01;36;40'
+  alias ls="ls --color=yes"
 fi
 
 export PATH="$HOME/.bin:$PATH"
@@ -105,3 +106,5 @@ if [ "$TMUX" = "" ] && [ "$session" "==" "local" ]; then
         exec tmux
     fi
 fi
+
+export DISPLAY=localhost:0.0
