@@ -51,7 +51,7 @@ filetype plugin indent on
 
 " Airline
 let g:switch_mapping = "+"
-let g:airline_theme = 'base16_atelierdune'
+let g:airline_theme = 'deus'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
@@ -81,11 +81,6 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vim_markdown_folding_disabled = 1
 
-nmap <leader>t :TagbarToggle<CR>
-xmap <leader>t :TagbarToggle<CR>
-nmap <leader>a :AirlineToggle<CR>
-
-
 " defaults ___________________________________________________________________
 
 " ensure sensible defaults for vim8
@@ -104,6 +99,7 @@ set wildignore+=*.pyc " Python byte code
 set wildignore+=*.sw? " Vim swap files
 set wildignore+=**/build/** " Python build files
 set wildignore+=**/dist/** " Python dist files
+set wildmode=list:longest,full
 
 " set options of completion
 set completeopt=menuone,preview
@@ -111,10 +107,11 @@ set complete-=i
 set complete-=d
 
 " use vertical diff split by default
+set diffopt+=vertical
+
 " set nicer diff options
-set diffopt=vertical,filler
-if has('nvim')
-    set diffopt+=internal,algorithm:patience,indent-heuristic
+if has('nvim-0.3.2') || has("patch-8.1.0360")
+    set diffopt=filler,internal,algorithm:patience,indent-heuristic
 endif
 
 " set netrw options
@@ -124,6 +121,13 @@ let g:netrw_altv = 1          " open files on right
 let g:netrw_preview = 1       " open previews vertically
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
+
+" use system clipboard, but not for x/X
+if has('clipboard')
+    set clipboard=unnamedplus
+    noremap x "_x
+    noremap X "_X
+endif
 
 syntax on
 
@@ -185,6 +189,7 @@ nmap <leader>e :call ToggleVex()<CR>
 nmap <leader>d :call ToggleDiff()<CR>
 nmap <leader>w :ToggleWhitespace<CR>
 nmap <leader>m :MRU<CR>
+nmap <leader>r :set wrap!<CR>
 
 set pastetoggle=<leader>p
 
@@ -207,6 +212,8 @@ nmap <leader>a :AirlineToggle<CR>
 " cd to directory of current file
 nnoremap <leader>cd :cd %:p:h
 
+nmap <leader>c :set cursorline!<CR>
+nmap <leader>n :set number! relativenumber!<CR>
 
 " commands ___________________________________________________________________
 
@@ -217,8 +224,18 @@ cabbrev gg
       \ <Bar> copen
       \ <C-Left><C-Left><C-Left>
 
+" cd to directory of current file
+:command! CD cd %:p:h
+
 " fancy git log
 :command! -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
+
+" close all buffers except the current one
+command! BufOnly silent! execute "%bd|e#|bd#"
+
+" format json
+command! JSONtool execute '%!python -m json.tool' | w
+
 
 " calculator
 if has('python3')
@@ -237,6 +254,8 @@ endif
 :command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
 :command! -nargs=1 ToLog :Calc 20*log10(<args>)
 
+" tabnew
+:command -nargs=* T tabnew <args>
 
 " whitespace defaults _________________________________________________________
 
@@ -265,6 +284,11 @@ augroup JenkinsfileGroup
   au! BufRead,BufNewFile,BufEnter Jenkinsfile set ft=groovy
 augroup END
 
+" Binary
+augroup BinaryfileGroup
+  au! BufRead,BufNewFile,BufEnter *.bin set nofixendofline
+augroup END
+
 " python
 autocmd Filetype python setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype python setlocal makeprg=pylint\ --reports=n\ --output-format=parseable\ %
@@ -275,6 +299,9 @@ autocmd Filetype python autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
 autocmd Filetype markdown setlocal makeprg=grip\ \"%\"\ --user-content\ -b\ &&\
+
+" asm
+autocmd BufNewFile,BufRead *.asm set ft=perl
 
 " other
 autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
@@ -312,7 +339,8 @@ endif
 hi clear SignColumn
 hi clear SpellBad
 
-hi ColorColumn ctermbg=18
+hi ColorColumn ctermbg=white
+hi ColorColumn ctermfg=black
 hi LineNr ctermfg=darkgrey
 hi VertSplit ctermbg=darkgrey ctermfg=black
 hi TabLineFill ctermfg=black ctermbg=black

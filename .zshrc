@@ -23,7 +23,7 @@ esac
 
 if [ "$machine" "==" "Cygwin" ]; then
   alias open=cygstart
-  alias cmd="open /cygdrive/c/WINDOWS/system32/cmd.exe \"/k $(cygpath -w ~/winhome/Local/cmdrc.bat) && cd $(cygpath -w $(pwd))\""
+  alias cmd="open /cygdrive/c/WINDOWS/system32/cmd.exe \"/k $(cygpath -w $HOME/winhome/Local/cmdrc.bat) && cd $(cygpath -w $(pwd))\""
   export PYTHONUNBUFFERED=yes
 
 elif [ "$machine" "==" "Mac" ]; then
@@ -42,7 +42,7 @@ else
   alias ls="ls --color=no"
 fi
 
-export PATH="~/.bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
 
 if [ -n "$VIRTUAL_ENV" ]; then
   if [ -e "$VIRTUAL_ENV/bin/activate" ]; then
@@ -51,9 +51,7 @@ if [ -n "$VIRTUAL_ENV" ]; then
     source "$VIRTUAL_ENV/Scripts/activate"
   fi
 else
-  if [ -e ~/.virtualenvs/default ]; then
-    source ~/.virtualenvs/default
-  elif [ -e ~/.venv/default ]; then
+  if [ -e ~/.venv/default ]; then
     source ~/.venv/default
   fi
 fi
