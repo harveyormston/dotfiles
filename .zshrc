@@ -1,5 +1,5 @@
 export ZSH=$HOME/.oh-my-zsh
-plugins=(brew extract git git-extras osx pip python tmux vagrant vi-mode web-search wd)
+plugins=(brew extract git git-extras macos pip python tmux vagrant vi-mode web-search wd)
 ZSH_DISABLE_COMPFIX=true
 # ZSH_TMUX_AUTOSTART=true
 ZSH_THEME="showsix"
