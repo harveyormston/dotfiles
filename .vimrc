@@ -80,6 +80,7 @@ let g:jedi#popup_on_dot = 0
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vim_markdown_folding_disabled = 1
+let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o,*.wav'
 
 " defaults ___________________________________________________________________
 
