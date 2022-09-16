@@ -33,15 +33,14 @@ Plugin 'PeterRincker/vim-argumentative'  " aids with manipulating and moving bet
 Plugin 'plasticboy/vim-markdown'         " markdown syntax
 Plugin 'chrisbra/csv.vim'                " handling column separated data
 Plugin 'majutsushi/tagbar'               " browsing the tags of source code files
-Plugin 'davidhalter/jedi-vim'            " jedi python autocompletion
 Plugin 'SirVer/ultisnips'                " snippet management
 Plugin 'harveyormston/vim-snippets'      " my snippets
 Plugin 'chriskempson/base16-vim'         " base16 colorschemes
 Plugin 'unblevable/quick-scope'          " highlight a unique character in every word on a line
 Plugin 'vimwiki/vimwiki'                 " a personal wiki
 Plugin 'vim-python/python-syntax'        " python syntax
-Plugin 'TaDaa/vimade'                    " dim inactive split panes
 Plugin 'justinj/vim-pico8-syntax'        " Pico8 Lua syntax
+Plugin 'jremmen/vim-ripgrep'             " RipGrep integration
 
 
 call vundle#end()
@@ -51,13 +50,20 @@ filetype plugin indent on
 
 " Airline
 let g:switch_mapping = "+"
-let g:airline_theme = 'deus'
+let g:airline_theme = 'selenized'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_splits = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " ALE
 let g:ale_linters = {'python': ['pylint']}
+let g:ale_fixers = {'python': ['black', 'isort'], 'c': 'CFix'}
+let g:ale_fix_on_save = 0
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
@@ -76,7 +82,6 @@ let g:snips_email="harveyormston@me.com"
 
 " Others
 let g:python_highlight_all = 1
-let g:jedi#popup_on_dot = 0
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vim_markdown_folding_disabled = 1
@@ -91,15 +96,6 @@ endif
 set nocompatible
 filetype off
 
-" ignore non-text files when wildcard matching
-set wildignore+=*.aux,*.out,*.toc " LaTeX intermediate files
-set wildignore+=*.jpg,*.bmp,*.gif " binary images
-set wildignore+=*.wav,*.mp3,*.raw " binary audio
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
-set wildignore+=*.pyc " Python byte code
-set wildignore+=*.sw? " Vim swap files
-set wildignore+=**/build/** " Python build files
-set wildignore+=**/dist/** " Python dist files
 set wildmode=list:longest,full
 
 " set options of completion
@@ -124,7 +120,7 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
 
 " use system clipboard, but not for x/X
-if has('clipboard')
+if has('clipboard') && !has("win32")
     set clipboard=unnamedplus
     noremap x "_x
     noremap X "_X
@@ -296,6 +292,9 @@ autocmd Filetype python setlocal makeprg=pylint\ --reports=n\ --output-format=pa
 autocmd Filetype python setlocal errorformat=%f:%l:\ %m
 autocmd Filetype python autocmd QuickFixCmdPost [^l]* nested cwindow
 
+" c
+autocmd Filetype c setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
+
 " markdown
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
@@ -409,6 +408,31 @@ endfunction
 
 autocmd VimLeave * call SaveSess()
 autocmd VimEnter * nested call RestoreSess()
+
+fu! CFix(buffer)
+
+    let l:cmd = [
+        \'astyle',
+        \'--style=kr',
+        \'--attach-closing-while',
+        \'--indent=spaces=4',
+        \'--convert-tabs',
+        \'--add-braces',
+        \'--align-pointer=name',
+        \'--align-reference=name',
+        \'--max-code-length=100',
+        \'--pad-header',
+        \'--pad-oper',
+        \'--break-after-logical',
+        \'--indent-after-parens',
+        \'--pad-comma',
+        \'--suffix=none',
+    \]
+
+    let l:result = {'command': join(l:cmd, ' ')}
+
+    return l:result
+endfunction
 
 " vertical netrw  ____________________________________________________________
 
