@@ -33,6 +33,7 @@ elif [ "$machine" "==" "Mac" ]; then
   export PATH="/usr/local/opt/qt/bin:$PATH"
   export PATH="$HOME/Library/Python/2.7/bin:$PATH"
   export PATH="$HOME/Library/Python/3.7/bin:$PATH"
+  export PATH="$HOME/Library/Python/3.9/bin:$PATH"
   alias top="htop"
   alias ctags="`brew --prefix`/bin/ctags"
 
