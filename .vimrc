@@ -121,7 +121,11 @@ let g:netrw_winsize = 20
 
 " use system clipboard, but not for x/X
 if has('clipboard') && !has("win32")
-    set clipboard=unnamedplus
+    if system('uname -s') == "Darwin\n"
+        set clipboard=unnamed " macos
+    else
+        set clipboard=unnamedplus " Linux
+    endif
     noremap x "_x
     noremap X "_X
 endif
