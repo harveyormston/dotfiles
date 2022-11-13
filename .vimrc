@@ -41,6 +41,7 @@ Plugin 'vimwiki/vimwiki'                 " a personal wiki
 Plugin 'vim-python/python-syntax'        " python syntax
 Plugin 'justinj/vim-pico8-syntax'        " Pico8 Lua syntax
 Plugin 'jremmen/vim-ripgrep'             " RipGrep integration
+Plugin 'devinceble/Tortoise-Typing'      " Touch typing tutor
 
 
 call vundle#end()
@@ -50,8 +51,7 @@ filetype plugin indent on
 
 " Airline
 let g:switch_mapping = "+"
-let g:airline_theme = 'selenized'
-let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme = 'transparent'
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#enabled = 1
@@ -191,6 +191,8 @@ nmap <leader>d :call ToggleDiff()<CR>
 nmap <leader>w :ToggleWhitespace<CR>
 nmap <leader>m :MRU<CR>
 nmap <leader>r :set wrap!<CR>
+nmap <leader>t :execute 'set showtabline=' . (&showtabline ==# 0 ? 2 : 0)<CR>
+nmap <leader>s :execute 'set laststatus=' . (&laststatus ==# 0 ? 2 : 0)<CR>
 
 set pastetoggle=<leader>p
 
@@ -206,8 +208,7 @@ nnoremap <leader>h :tabprevious<CR>
 nnoremap <leader>j :bn<CR>
 nnoremap <leader>k :bp<CR>
 
-nmap <leader>t :TagbarToggle<CR>
-xmap <leader>t :TagbarToggle<CR>
+nmap <leader>g :TagbarToggle<CR>
 nmap <leader>a :AirlineToggle<CR>
 
 " cd to directory of current file
@@ -246,17 +247,6 @@ else
     :command! -nargs=+ Calc :py from __future__ import division, print_function; print(<args>)
     :py from math import *
 endif
-
-" convert to/from hex
-:command! -nargs=1 FromHex :echo <args>
-:command! -nargs=1 ToHex :echo printf('%x', <args>)
-
-" convert to/from log domain
-:command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
-:command! -nargs=1 ToLog :Calc 20*log10(<args>)
-
-" tabnew
-:command -nargs=* T tabnew <args>
 
 " whitespace defaults _________________________________________________________
 
@@ -347,9 +337,9 @@ hi ColorColumn ctermbg=white
 hi ColorColumn ctermfg=black
 hi LineNr ctermfg=darkgrey
 hi VertSplit ctermbg=darkgrey ctermfg=black
-hi TabLineFill ctermfg=black ctermbg=black
-hi TabLine ctermfg=Blue ctermbg=black
-hi TabLineSel ctermfg=Red ctermbg=black
+hi TabLineFill ctermfg=black ctermbg=none
+hi TabLine ctermfg=Blue ctermbg=none
+hi TabLineSel ctermfg=Red ctermbg=none
 hi SpellBad cterm=underline ctermfg=black ctermbg=red
 hi Visual cterm=none ctermbg=blue ctermfg=black
 hi Search cterm=none ctermbg=red ctermfg=black
