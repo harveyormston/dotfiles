@@ -151,7 +151,6 @@ set hlsearch
 set lazyredraw
 set ruler
 set number
-set relativenumber
 set showcmd
 set laststatus=2
 set swapfile
