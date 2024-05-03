@@ -18,8 +18,6 @@ Plugin 'tpope/vim-commentary'            " comment stuff out/in
 Plugin 'tpope/vim-repeat'                " dot operator tools
 Plugin 'tpope/vim-fugitive'              " git client
 Plugin 'tpope/vim-dispatch'              " build and test
-Plugin 'alfredodeza/pytest.vim'          " pytest
-Plugin '5long/pytest-vim-compiler'       " pytest compiler plugin for dispatch
 Plugin 'ntpeters/vim-better-whitespace'  " highlight trailing whitespace characters
 Plugin 'w0rp/ale'                        " asynchronous linting engine
 Plugin 'AndrewRadev/switch.vim'          " true<->false, etc
@@ -39,9 +37,9 @@ Plugin 'chriskempson/base16-vim'         " base16 colorschemes
 Plugin 'unblevable/quick-scope'          " highlight a unique character in every word on a line
 Plugin 'vimwiki/vimwiki'                 " a personal wiki
 Plugin 'vim-python/python-syntax'        " python syntax
-Plugin 'justinj/vim-pico8-syntax'        " Pico8 Lua syntax
 Plugin 'jremmen/vim-ripgrep'             " RipGrep integration
 Plugin 'devinceble/Tortoise-Typing'      " Touch typing tutor
+Plugin 'eggbean/resize-font.gvim'        " Resize GUI font
 
 
 call vundle#end()
@@ -52,6 +50,7 @@ filetype plugin indent on
 " Airline
 let g:switch_mapping = "+"
 let g:airline_theme = 'transparent'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#enabled = 1
@@ -62,7 +61,7 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " ALE
 let g:ale_linters = {'python': ['pylint']}
-let g:ale_fixers = {'python': ['black', 'isort'], 'c': 'CFix'}
+let g:ale_fixers = {'python': ['isort', 'black'], 'c': 'CFix'}
 let g:ale_fix_on_save = 0
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -86,6 +85,7 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:vimwiki_list = [{'path': '$HOME/.wiki', 'path_html': '$HOME/.wiki_html', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vim_markdown_folding_disabled = 1
 let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o,*.wav'
+let g:hexmode_xxd_options = '-g 4 -e -c 4'
 
 " defaults ___________________________________________________________________
 
@@ -95,6 +95,7 @@ if v:version >= 800 && !has('nvim')
 endif
 set nocompatible
 filetype off
+set belloff=all
 
 set wildmode=list:longest,full
 
@@ -120,11 +121,15 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
 
 " use system clipboard, but not for x/X
-if has('clipboard') && !has("win32")
-    if system('uname -s') == "Darwin\n"
-        set clipboard=unnamed " macos
+if has('clipboard')
+    if has("win32")
+        set clipboard=unnamedplus
     else
-        set clipboard=unnamedplus " Linux
+        if system('uname -s') == "Darwin\n"
+            set clipboard=unnamed " macos
+        else
+            set clipboard=unnamedplus " Linux
+        endif
     endif
     noremap x "_x
     noremap X "_X
@@ -169,10 +174,8 @@ autocmd CursorHold * checktime
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 inoremap jk <esc>
-if has('nvim')
-    " map jk for terminal in neovim
-    tnoremap jk <C-\><C-n>
-endif
+" map jk for terminal
+tnoremap jk <C-\><C-n>
 nnoremap * *Nzz
 nnoremap # #Nzz
 
@@ -186,13 +189,11 @@ nmap <leader>\| :vsp<CR>
 nmap <leader>- :sp<CR>
 
 " toggles
-nmap <leader>e :call ToggleVex()<CR>
+nmap <leader>e :Lexplore<CR>
 nmap <leader>d :call ToggleDiff()<CR>
 nmap <leader>w :ToggleWhitespace<CR>
 nmap <leader>m :MRU<CR>
 nmap <leader>r :set wrap!<CR>
-nmap <leader>t :execute 'set showtabline=' . (&showtabline ==# 0 ? 2 : 0)<CR>
-nmap <leader>s :execute 'set laststatus=' . (&laststatus ==# 0 ? 2 : 0)<CR>
 
 set pastetoggle=<leader>p
 
@@ -208,14 +209,15 @@ nnoremap <leader>h :tabprevious<CR>
 nnoremap <leader>j :bn<CR>
 nnoremap <leader>k :bp<CR>
 
-nmap <leader>g :TagbarToggle<CR>
+nmap <leader>t :TagbarToggle<CR>
+xmap <leader>t :TagbarToggle<CR>
 nmap <leader>a :AirlineToggle<CR>
 
 " cd to directory of current file
 nnoremap <leader>cd :cd %:p:h
 
 nmap <leader>c :set cursorline!<CR>
-nmap <leader>n :set number! relativenumber!<CR>
+nmap <leader>n :set number!<CR>
 
 " commands ___________________________________________________________________
 
@@ -247,6 +249,17 @@ else
     :command! -nargs=+ Calc :py from __future__ import division, print_function; print(<args>)
     :py from math import *
 endif
+
+" convert to/from hex
+:command! -nargs=1 FromHex :echo <args>
+:command! -nargs=1 ToHex :echo printf('%x', <args>)
+
+" convert to/from log domain
+:command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
+:command! -nargs=1 ToLog :Calc 20*log10(<args>)
+
+" tabnew
+:command -nargs=* T tabnew <args>
 
 " whitespace defaults _________________________________________________________
 
@@ -293,20 +306,20 @@ autocmd Filetype c setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
 autocmd Filetype markdown setlocal ts=2 sts=2 sw=2 tw=0
 autocmd Filetype markdown setlocal expandtab spell wrap linebreak breakindent
 autocmd Filetype markdown setlocal makeprg=grip\ \"%\"\ --user-content\ -b\ &&\
-
-" asm
-autocmd BufNewFile,BufRead *.asm set ft=perl
+autocmd Filetype markdown let b:tagbar_ignore = 1
 
 " other
 autocmd Filetype unknown setlocal ts=4 sts=4 sw=4 tw=79 cc=79 expandtab
+autocmd Filetype unknown let b:tagbar_ignore = 1
 autocmd Filetype make setlocal ts=4 sts=0 sw=4 noexpandtab
 autocmd Filetype tex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 autocmd Filetype plaintex setlocal ts=2 sts=2 sw=2 tw=79 cc=79 expandtab spell
 
 " terminal
 if has('nvim')
-    au TermOpen * setlocal nonumber norelativenumber
+    au TermOpen * setlocal nonumber
 endif
+autocmd TerminalOpen * setlocal nonumber
 
 
 " colorscheme ________________________________________________________________
@@ -336,14 +349,21 @@ hi clear SpellBad
 hi ColorColumn ctermbg=white
 hi ColorColumn ctermfg=black
 hi LineNr ctermfg=darkgrey
-hi VertSplit ctermbg=darkgrey ctermfg=black
-hi TabLineFill ctermfg=black ctermbg=none
-hi TabLine ctermfg=Blue ctermbg=none
-hi TabLineSel ctermfg=Red ctermbg=none
+hi VertSplit cterm=NONE
+hi TabLineFill ctermfg=black ctermbg=black
+hi TabLine ctermfg=Blue ctermbg=black
+hi TabLineSel ctermfg=Red ctermbg=black
 hi SpellBad cterm=underline ctermfg=black ctermbg=red
 hi Visual cterm=none ctermbg=blue ctermfg=black
 hi Search cterm=none ctermbg=red ctermfg=black
+hi Normal ctermbg=none
+hi nonText ctermbg=NONE
 
+if has("gui_running")
+    colorscheme base16-gruvbox-dark-medium
+    set guifont=Hack_Nerd_Font_Mono:h9:cANSI:qDRAFT
+    set guioptions=Acd
+endif
 
 " os/terminal specific _______________________________________________________
 
@@ -414,7 +434,7 @@ fu! CFix(buffer)
         \'--add-braces',
         \'--align-pointer=name',
         \'--align-reference=name',
-        \'--max-code-length=100',
+        \'--max-code-length=120',
         \'--pad-header',
         \'--pad-oper',
         \'--break-after-logical',
@@ -426,21 +446,6 @@ fu! CFix(buffer)
     let l:result = {'command': join(l:cmd, ' ')}
 
     return l:result
-endfunction
-
-" vertical netrw  ____________________________________________________________
-
-fu! ToggleVex()
-    if exists("t:expl_buf_num")
-        let expl_win_num = bufwinnr(t:expl_buf_num)
-        exec expl_win_num . 'wincmd w'
-        close
-        unlet t:expl_buf_num
-    else
-        exec '1wincmd w'
-        Vexplore
-        let t:expl_buf_num = bufnr("%")
-    endif
 endfunction
 
 " diff mode  _________________________________________________________________
