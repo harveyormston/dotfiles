@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HEART='♥ '
+HEART='❤ '
 POWER=' ϟ'
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -33,7 +33,7 @@ if [[ $charged_slots -gt 10 ]]; then
   charged_slots=10
 fi
 
-echo -n '#[fg=colour9]'
+echo -n '#[fg=colour1]'
 for i in `seq 1 $charged_slots`; do echo -n "$HEART"; done
 
 if [[ $charged_slots -lt 10 ]]; then
@@ -42,6 +42,6 @@ if [[ $charged_slots -lt 10 ]]; then
 fi
 
 if [ $state == "Y" ]; then
-    echo -n '#[fg=colour10]'
+    echo -n '#[fg=colour6]'
     echo -n "$POWER"
 fi
