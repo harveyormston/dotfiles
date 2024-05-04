@@ -110,3 +110,4 @@ fi
 set -g allow-passthrough 1
 
 export DISPLAY=localhost:0.0
+DISABLE_AUTO_TITLE="true"
