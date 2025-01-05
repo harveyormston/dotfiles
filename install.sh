@@ -9,8 +9,6 @@ then
 
     git submodule update --init --recursive
 
-    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-
     mkdir -p ~/.tmux
     mkdir -p ~/.tmux/plugins
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
