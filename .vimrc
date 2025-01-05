@@ -184,39 +184,39 @@ nnoremap # #Nzz
 map <space> <leader>
 
 " splits
-nmap <leader>\| :vsp<CR>
-nmap <leader>- :sp<CR>
+nmap <leader>\| <Cmd>vsp<CR>
+nmap <leader>- <Cmd>sp<CR>
 
 " toggles
-nmap <leader>e :Lexplore<CR>
-nmap <leader>d :call ToggleDiff()<CR>
-nmap <leader>w :ToggleWhitespace<CR>
-nmap <leader>m :MRU<CR>
-nmap <leader>r :set wrap!<CR>
+nmap <leader>e <Cmd>Lexplore<CR>
+nmap <leader>d <Cmd>call ToggleDiff()<CR>
+nmap <leader>w <Cmd>ToggleWhitespace<CR>
+nmap <leader>m <Cmd>MRU<CR>
+nmap <leader>r <Cmd>set wrap!<CR>
 
 set pastetoggle=<leader>p
 
 " tabs and buffers
-nmap <leader>o :tabnew<CR>
-nnoremap <leader>b :buffers<CR>:buffer<Space>
+nmap <leader>o <Cmd>tabnew<CR>
+nnoremap <leader>b <Cmd>buffers<CR><Cmd>buffer<Space>
 
 " use l, h to go back and forward through tabs
-nnoremap <leader>l :tabnext<CR>
-nnoremap <leader>h :tabprevious<CR>
+nnoremap <leader>l <Cmd>tabnext<CR>
+nnoremap <leader>h <Cmd>tabprevious<CR>
 
 " use j, k to go back and forward through buffers
-nnoremap <leader>j :bn<CR>
-nnoremap <leader>k :bp<CR>
+nnoremap <leader>j <Cmd>bn<CR>
+nnoremap <leader>k <Cmd>bp<CR>
 
-nmap <leader>t :TagbarToggle<CR>
-xmap <leader>t :TagbarToggle<CR>
-nmap <leader>a :AirlineToggle<CR>
+nmap <leader>t <Cmd>TagbarToggle<CR>
+xmap <leader>t <Cmd>TagbarToggle<CR>
+nmap <leader>a <Cmd>AirlineToggle<CR>
 
 " cd to directory of current file
-nnoremap <leader>cd :cd %:p:h
+nnoremap <leader>cd <Cmd>cd %:p:h
 
-nmap <leader>c :set cursorline!<CR>
-nmap <leader>n :set number!<CR>
+nmap <leader>c <Cmd>set cursorline!<CR><Cmd>set cursorcolumn!<CR>
+nmap <leader>n <Cmd>set number!<CR>
 
 " commands ___________________________________________________________________
 
@@ -250,12 +250,12 @@ else
 endif
 
 " convert to/from hex
-:command! -nargs=1 FromHex :echo <args>
-:command! -nargs=1 ToHex :echo printf('%x', <args>)
+:command! -nargs=1 FromHex <Cmd>echo <args>
+:command! -nargs=1 ToHex <Cmd>echo printf('%x', <args>)
 
 " convert to/from log domain
-:command! -nargs=1 FromLog :Calc 10**(<args>/20.0)
-:command! -nargs=1 ToLog :Calc 20*log10(<args>)
+:command! -nargs=1 FromLog <Cmd>Calc 10**(<args>/20.0)
+:command! -nargs=1 ToLog <Cmd>Calc 20*log10(<args>)
 
 " tabnew
 :command -nargs=* T tabnew <args>
