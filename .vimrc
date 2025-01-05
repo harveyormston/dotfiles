@@ -33,13 +33,13 @@ Plugin 'chrisbra/csv.vim'                " handling column separated data
 Plugin 'majutsushi/tagbar'               " browsing the tags of source code files
 Plugin 'SirVer/ultisnips'                " snippet management
 Plugin 'harveyormston/vim-snippets'      " my snippets
-Plugin 'chriskempson/base16-vim'         " base16 colorschemes
 Plugin 'unblevable/quick-scope'          " highlight a unique character in every word on a line
 Plugin 'vimwiki/vimwiki'                 " a personal wiki
 Plugin 'vim-python/python-syntax'        " python syntax
 Plugin 'jremmen/vim-ripgrep'             " RipGrep integration
 Plugin 'devinceble/Tortoise-Typing'      " Touch typing tutor
 Plugin 'eggbean/resize-font.gvim'        " Resize GUI font
+Plugin 'rafi/awesome-vim-colorschemes'   " collection of colorschemes
 
 
 call vundle#end()
@@ -49,7 +49,7 @@ filetype plugin indent on
 
 " Airline
 let g:switch_mapping = "+"
-let g:airline_theme = 'transparent'
+let g:airline_theme = 'term'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_inactive_collapse=0
 let g:airline_powerline_fonts = 0
@@ -323,43 +323,27 @@ autocmd TerminalOpen * setlocal nonumber
 
 " colorscheme ________________________________________________________________
 
-let base16colorspace=256
-try
-    colorscheme base16
-catch
-    colorscheme default
-endtry
-
-" set light background if 'light' is in the current base16 theme name
-let base16_theme = resolve(expand("$HOME/.base16_theme"))
-if filereadable(base16_theme)
-    if base16_theme =~ 'light'
-        set bg=light
-    else
-        set bg=dark
-    endif
-else
-    set bg=dark
-endif
+colorscheme molokai
 
 hi clear SignColumn
 hi clear SpellBad
+hi clear Visual
 
-hi ColorColumn ctermbg=white
-hi ColorColumn ctermfg=black
-hi LineNr ctermfg=darkgrey
-hi VertSplit cterm=NONE
-hi TabLineFill ctermfg=black ctermbg=black
-hi TabLine ctermfg=Blue ctermbg=black
-hi TabLineSel ctermfg=Red ctermbg=black
-hi SpellBad cterm=underline ctermfg=black ctermbg=red
-hi Visual cterm=none ctermbg=blue ctermfg=black
-hi Search cterm=none ctermbg=red ctermfg=black
-hi Normal ctermbg=none
+hi Normal ctermbg=NONE
 hi nonText ctermbg=NONE
 
+hi ColorColumn ctermbg=234
+hi LineNr ctermfg=darkgrey ctermbg=NONE
+hi VertSplit cterm=NONE
+hi SpellBad cterm=underline ctermfg=black ctermbg=red
+hi Visual cterm=reverse
+hi Search ctermbg=red ctermfg=black
+hi CurSearch ctermfg=red
+hi CursorColumn term=reverse ctermbg=233
+hi CursorLine term=reverse ctermbg=233
+hi CursorLineNR cterm=bold ctermfg=darkgrey ctermbg=NONE
+
 if has("gui_running")
-    colorscheme base16-gruvbox-dark-medium
     set guifont=Hack_Nerd_Font_Mono:h9:cANSI:qDRAFT
     set guioptions=Acd
 endif
@@ -372,7 +356,7 @@ if has("win32")
 else
     set directory=$HOME/.vim/swapfiles//
     set backupdir=$HOME/.vim/swapfiles//
-    hi Normal ctermbg=none
+    hi Normal ctermbg=NONE
     hi nonText ctermbg=NONE
 
     if &term =~ "screen"
