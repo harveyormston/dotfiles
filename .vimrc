@@ -1,6 +1,7 @@
 " vundle _____________________________________________________________________
 
 " add Vundle to path and start
+set viminfo+=n~/.viminfo-%{hostname()}
 if has("win32")
     set rtp+=$HOME/.vim/bundle/Vundle.vim/
     call vundle#begin('$HOME/.vim/bundle/')
@@ -40,7 +41,8 @@ Plugin 'jremmen/vim-ripgrep'             " RipGrep integration
 Plugin 'devinceble/Tortoise-Typing'      " Touch typing tutor
 Plugin 'eggbean/resize-font.gvim'        " Resize GUI font
 Plugin 'rafi/awesome-vim-colorschemes'   " collection of colorschemes
-
+Plugin 'gcmt/taboo.vim'                  " Tab naming and management
+Plugin 'vim-scripts/DrawIt'              " Draw ascii diagrams
 
 call vundle#end()
 filetype plugin indent on
@@ -249,16 +251,8 @@ else
     :py from math import *
 endif
 
-" convert to/from hex
-:command! -nargs=1 FromHex <Cmd>echo <args>
-:command! -nargs=1 ToHex <Cmd>echo printf('%x', <args>)
-
-" convert to/from log domain
-:command! -nargs=1 FromLog <Cmd>Calc 10**(<args>/20.0)
-:command! -nargs=1 ToLog <Cmd>Calc 20*log10(<args>)
-
 " tabnew
-:command -nargs=* T tabnew <args>
+:command -nargs=* T TabooOpen <args>
 
 " whitespace defaults _________________________________________________________
 
@@ -360,15 +354,15 @@ else
     hi nonText ctermbg=NONE
 
     if &term =~ "screen"
-        let &t_ti.="\eP\e[6 q\e\\"
+        let &t_ti.="\eP\e[2 q\e\\"
         let &t_SI.="\eP\e[4 q\e\\"
-        let &t_EI.="\eP\e[6 q\e\\"
+        let &t_EI.="\eP\e[2 q\e\\"
         let &t_te.="\eP\e[4 q\e\\"
         set t_Co=256
     else
-        let &t_ti.="\e[6 q"
+        let &t_ti.="\e[2 q"
         let &t_SI.="\e[4 q"
-        let &t_EI.="\e[6 q"
+        let &t_EI.="\e[2 q"
         let &t_te.="\e[4 q"
     endif
 
