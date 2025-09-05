@@ -19,6 +19,7 @@ Plugin 'tpope/vim-commentary'            " comment stuff out/in
 Plugin 'tpope/vim-repeat'                " dot operator tools
 Plugin 'tpope/vim-fugitive'              " git client
 Plugin 'tpope/vim-dispatch'              " build and test
+Plugin 'tpope/vim-vinegar'               " project drawer
 Plugin 'ntpeters/vim-better-whitespace'  " highlight trailing whitespace characters
 Plugin 'w0rp/ale'                        " asynchronous linting engine
 Plugin 'AndrewRadev/switch.vim'          " true<->false, etc
@@ -32,7 +33,9 @@ Plugin 'PeterRincker/vim-argumentative'  " aids with manipulating and moving bet
 Plugin 'plasticboy/vim-markdown'         " markdown syntax
 Plugin 'chrisbra/csv.vim'                " handling column separated data
 Plugin 'majutsushi/tagbar'               " browsing the tags of source code files
-Plugin 'SirVer/ultisnips'                " snippet management
+if has("python3")
+    Plugin 'SirVer/ultisnips'                " snippet management
+endif
 Plugin 'harveyormston/vim-snippets'      " my snippets
 Plugin 'unblevable/quick-scope'          " highlight a unique character in every word on a line
 Plugin 'vimwiki/vimwiki'                 " a personal wiki
@@ -43,6 +46,7 @@ Plugin 'eggbean/resize-font.gvim'        " Resize GUI font
 Plugin 'rafi/awesome-vim-colorschemes'   " collection of colorschemes
 Plugin 'gcmt/taboo.vim'                  " Tab naming and management
 Plugin 'vim-scripts/DrawIt'              " Draw ascii diagrams
+Plugin 'iamcco/markdown-preview.nvim'    " MarkDown preview
 
 call vundle#end()
 filetype plugin indent on
@@ -62,16 +66,18 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " ALE
-let g:ale_linters = {'python': ['pylint']}
-let g:ale_fixers = {'python': ['isort', 'black'], 'c': 'CFix'}
-let g:ale_fix_on_save = 0
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_pylint_use_global = 1
-let g:ale_set_loclist = 1
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
+if has('python3')
+    let g:ale_linters = {'python': ['pylint']}
+    let g:ale_fixers = {'python': ['black', 'isort'], 'c': 'CFix'}
+    let g:ale_fix_on_save = 0
+    let g:ale_echo_msg_error_str = 'E'
+    let g:ale_echo_msg_warning_str = 'W'
+    let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+    let g:ale_python_pylint_use_global = 0
+    let g:ale_set_loclist = 1
+    let g:ale_lint_on_text_changed = 'normal'
+    let g:ale_lint_on_insert_leave = 1
+endif
 
 " Snippets
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -80,6 +86,15 @@ let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
 let g:snips_author="Harvey Ormston"
 let g:snips_email="harveyormston@me.com"
+
+" Pymode
+
+let g:pymode_rope_completion = 1
+let g:pymode_rope_complete_on_dot = 1
+let g:pymode_rope_goto_definition_bind = 'gd'
+let g:pymode_rope_goto_definition_cmd = 'vnew'
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
 
 " Others
 let g:python_highlight_all = 1
@@ -200,7 +215,7 @@ set pastetoggle=<leader>p
 
 " tabs and buffers
 nmap <leader>o <Cmd>tabnew<CR>
-nnoremap <leader>b <Cmd>buffers<CR><Cmd>buffer<Space>
+nnoremap <leader>b <Cmd>buffers<CR>:buffer<Space>
 
 " use l, h to go back and forward through tabs
 nnoremap <leader>l <Cmd>tabnext<CR>
@@ -211,7 +226,6 @@ nnoremap <leader>j <Cmd>bn<CR>
 nnoremap <leader>k <Cmd>bp<CR>
 
 nmap <leader>t <Cmd>TagbarToggle<CR>
-xmap <leader>t <Cmd>TagbarToggle<CR>
 nmap <leader>a <Cmd>AirlineToggle<CR>
 
 " cd to directory of current file
@@ -246,7 +260,7 @@ command! JSONtool execute '%!python -m json.tool' | w
 if has('python3')
     :command! -nargs=+ Calc :py3 print(<args>)
     :py3 from math import *
-else
+elseif has('python')
     :command! -nargs=+ Calc :py from __future__ import division, print_function; print(<args>)
     :py from math import *
 endif
